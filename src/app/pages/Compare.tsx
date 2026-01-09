@@ -1,4 +1,12 @@
-import { FileDown, X } from 'lucide-react';
+// import { FileDown, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Card } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { Checkbox } from '../components/ui/checkbox';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
+import { Download, FileDown, X } from 'lucide-react';
+import { mockAlgorithms, mockPerformanceMetrics, getPRCurveData, getROCCurveData } from '.././components/mockData';
 import {
   LineChart,
   Line,
@@ -108,6 +116,50 @@ const metricsData = [
 ];
 
 export function Compare() {
+  const [selectedAlgorithms, setSelectedAlgorithms] = useState<string[]>(['alg1', 'alg3']);
+
+  const toggleAlgorithm = (algId: string) => {
+    setSelectedAlgorithms(prev =>
+      prev.includes(algId)
+        ? prev.filter(id => id !== algId)
+        : [...prev, algId]
+    );
+  };
+
+  const selectAll = () => {
+    setSelectedAlgorithms(mockAlgorithms.map(a => a.id));
+  };
+
+  const deselectAll = () => {
+    setSelectedAlgorithms([]);
+  };
+
+  const selectedMetrics = mockPerformanceMetrics.filter(m =>
+    selectedAlgorithms.includes(m.algorithmId)
+  );
+
+  const colors = ['#5B2C6F', '#28A745', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6'];
+
+  const prData = Array.from({ length: 11 }, (_, i) => {
+    const recall = i * 0.1;
+    const point: any = { recall };
+    selectedAlgorithms.forEach((algId, idx) => {
+      const precision = 0.9 - recall * 0.4 - (idx * 0.05) + Math.random() * 0.05;
+      point[algId] = Math.max(0, Math.min(1, precision));
+    });
+    return point;
+  });
+
+  const rocData = Array.from({ length: 11 }, (_, i) => {
+    const fpr = i * 0.1;
+    const point: any = { fpr };
+    selectedAlgorithms.forEach((algId, idx) => {
+      const tpr = fpr + 0.3 + (idx * 0.05) + Math.random() * 0.05;
+      point[algId] = Math.min(1, tpr);
+    });
+    return point;
+  });
+
   return (
     <div className="min-h-screen py-8">
       <div className="container px-4">
@@ -120,37 +172,58 @@ export function Compare() {
         </div>
 
         {/* Algorithm Selection */}
-        <div className="mb-6 p-6 rounded-lg border bg-card">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Select Algorithms to Compare</h2>
+        <Card className="p-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-foreground">Select Algorithms to Compare</h3>
             <div className="flex gap-2">
-              <button className="text-sm text-primary hover:underline">Select All</button>
-              <button className="text-sm text-muted-foreground hover:underline">Clear</button>
+              <Button variant="outline" size="sm" onClick={selectAll}>
+                Select All
+              </Button>
+              <Button variant="outline" size="sm" onClick={deselectAll}>
+                Deselect All
+              </Button>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {algorithms.map((algo) => (
-              <button
-                key={algo.name}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${
-                  algo.selected
-                    ? 'bg-primary/10 border-primary text-primary'
-                    : 'border-border hover:bg-accent'
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {mockAlgorithms.map(algorithm => (
+              <div
+                key={algorithm.id}
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  selectedAlgorithms.includes(algorithm.id)
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:border-primary/50'
                 }`}
+                onClick={() => toggleAlgorithm(algorithm.id)}
               >
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: algo.color }}
-                />
-                {algo.name}
-                {algo.selected && <X className="w-3 h-3" />}
-              </button>
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    checked={selectedAlgorithms.includes(algorithm.id)}
+                    onCheckedChange={() => toggleAlgorithm(algorithm.id)}
+                  />
+                  <div className="flex-1">
+                    <p className="text-foreground">{algorithm.name}</p>
+                    <p className="text-xs text-muted-foreground mb-2">v{algorithm.version}</p>
+                    <Badge variant="secondary" className="text-xs">
+                      {algorithm.category}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
+
+          <div className="flex items-center gap-2 pt-4 border-t border-border">
+            <p className="text-sm text-muted-foreground">
+              <span className="text-foreground">{selectedAlgorithms.length}</span> algorithms selected
+            </p>
+          </div>
         </div>
+      </Card>
 
         {/* Performance Metrics Table */}
-        <div className="mb-6 p-6 rounded-lg border bg-card">
+        {/* <div className="mb-6 p-6 rounded-lg border bg-card">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="font-semibold mb-1">Performance Metrics</h2>
@@ -214,12 +287,216 @@ export function Compare() {
               </tbody>
             </table>
           </div>
+        </div> */}
+
+        
+      {/* Performance Metrics Table */}
+      {selectedMetrics.length > 0 && (
+        <Card>
+          <div className="p-4 border-b border-border flex items-center justify-between">
+            <h3 className="text-foreground">Performance Metrics</h3>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" className="gap-2">
+                <FileDown className="w-4 h-4" />
+                Export CSV
+              </Button>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Download className="w-4 h-4" />
+                Export PDF
+              </Button>
+            </div>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Algorithm</TableHead>
+                <TableHead className="text-right">Precision</TableHead>
+                <TableHead className="text-right">Recall</TableHead>
+                <TableHead className="text-right">F1 Score</TableHead>
+                <TableHead className="text-right">AUROC</TableHead>
+                <TableHead className="text-right">AUPRC</TableHead>
+                <TableHead className="text-right">Early Prec.</TableHead>
+                <TableHead className="text-right">Runtime (s)</TableHead>
+                <TableHead className="text-right">Memory (MB)</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {selectedMetrics.map((metric, idx) => (
+                <TableRow key={metric.algorithmId}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: colors[idx % colors.length] }}
+                      />
+                      <span className="text-foreground">{metric.algorithmName}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">{metric.precision.toFixed(3)}</TableCell>
+                  <TableCell className="text-right">{metric.recall.toFixed(3)}</TableCell>
+                  <TableCell className="text-right">{metric.f1Score.toFixed(3)}</TableCell>
+                  <TableCell className="text-right">{metric.auroc.toFixed(3)}</TableCell>
+                  <TableCell className="text-right">{metric.auprc.toFixed(3)}</TableCell>
+                  <TableCell className="text-right">{metric.earlyPrecision.toFixed(3)}</TableCell>
+                  <TableCell className="text-right">{metric.runtime.toFixed(1)}</TableCell>
+                  <TableCell className="text-right">{metric.memoryUsage.toLocaleString()}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      )}
+
+      
+      {/* Visualization Zone */}
+      {selectedMetrics.length > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Precision-Recall Curve */}
+          <Card className="p-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-foreground">Precision-Recall Curve</h3>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Export
+                </Button>
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={prData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E4E6EB" />
+                  <XAxis
+                    dataKey="recall"
+                    label={{ value: 'Recall', position: 'insideBottom', offset: -5 }}
+                    tick={{ fontSize: 12 }}
+                  />
+                  <YAxis
+                    label={{ value: 'Precision', angle: -90, position: 'insideLeft' }}
+                    tick={{ fontSize: 12 }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#ffffff',
+                      border: '1px solid #E4E6EB',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <Legend />
+                  {selectedAlgorithms.map((algId, idx) => {
+                    const alg = mockAlgorithms.find(a => a.id === algId);
+                    return (
+                      <Line
+                        key={algId}
+                        type="monotone"
+                        dataKey={algId}
+                        name={alg?.name}
+                        stroke={colors[idx % colors.length]}
+                        strokeWidth={2}
+                        dot={false}
+                      />
+                    );
+                  })}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+
+          {/* ROC Curve */}
+          <Card className="p-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-foreground">ROC Curve</h3>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Export
+                </Button>
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={rocData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E4E6EB" />
+                  <XAxis
+                    dataKey="fpr"
+                    label={{ value: 'False Positive Rate', position: 'insideBottom', offset: -5 }}
+                    tick={{ fontSize: 12 }}
+                  />
+                  <YAxis
+                    label={{ value: 'True Positive Rate', angle: -90, position: 'insideLeft' }}
+                    tick={{ fontSize: 12 }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#ffffff',
+                      border: '1px solid #E4E6EB',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <Legend />
+                  {selectedAlgorithms.map((algId, idx) => {
+                    const alg = mockAlgorithms.find(a => a.id === algId);
+                    return (
+                      <Line
+                        key={algId}
+                        type="monotone"
+                        dataKey={algId}
+                        name={alg?.name}
+                        stroke={colors[idx % colors.length]}
+                        strokeWidth={2}
+                        dot={false}
+                      />
+                    );
+                  })}
+                  <Line
+                    type="monotone"
+                    dataKey="fpr"
+                    stroke="#E4E6EB"
+                    strokeWidth={1}
+                    strokeDasharray="5 5"
+                    dot={false}
+                    name="Random"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+
+          {/* Performance Comparison Bar Chart */}
+          <Card className="lg:col-span-2 p-6">
+            <div className="space-y-4">
+              <h3 className="text-foreground">Performance Comparison</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={selectedMetrics}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E4E6EB" />
+                  <XAxis dataKey="algorithmName" tick={{ fontSize: 12 }} />
+                  <YAxis domain={[0, 1]} tick={{ fontSize: 12 }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#ffffff',
+                      border: '1px solid #E4E6EB',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="precision" fill="#5B2C6F" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="recall" fill="#28A745" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="f1Score" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
         </div>
+      )}
+
+      {selectedMetrics.length === 0 && (
+        <Card className="p-12 text-center">
+          <p className="text-muted-foreground">
+            Select algorithms above to view performance comparisons
+          </p>
+        </Card>
+      )}
 
         {/* Charts */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-6">
+        {/* <div className="grid lg:grid-cols-2 gap-6 mb-6"> */}
           {/* PR Curves */}
-          <div className="p-6 rounded-lg border bg-card">
+          {/* <div className="p-6 rounded-lg border bg-card">
             <div className="mb-6">
               <h2 className="font-semibold mb-1">Precision-Recall Curves</h2>
               <p className="text-sm text-muted-foreground">Multi-algorithm overlay</p>
@@ -256,10 +533,10 @@ export function Compare() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </div> */}
 
           {/* ROC Curves */}
-          <div className="p-6 rounded-lg border bg-card">
+          {/* <div className="p-6 rounded-lg border bg-card">
             <div className="mb-6">
               <h2 className="font-semibold mb-1">ROC Curves</h2>
               <p className="text-sm text-muted-foreground">Receiver operating characteristic</p>
@@ -297,10 +574,10 @@ export function Compare() {
               </ResponsiveContainer>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Additional Charts */}
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-6 py-5">
           {/* Enrichment */}
           <div className="p-6 rounded-lg border bg-card">
             <div className="mb-6">
