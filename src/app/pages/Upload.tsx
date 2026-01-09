@@ -100,7 +100,7 @@ export function Upload() {
             </div>
 
             {/* Upload File */}
-            <div className="p-6 rounded-lg border bg-card">
+            <div id="queue"className="p-6 rounded-lg border bg-card">
               <h2 className="font-semibold mb-4">Upload Prediction File</h2>
               <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
                 <UploadIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -180,7 +180,7 @@ export function Upload() {
           </div>
 
           {/* File Format & Recent Jobs */}
-          <div className="space-y-4">
+          <div id="templates" className="space-y-4">
             {/* Expected Format */}
             <div className="p-6 rounded-lg border bg-card">
               <div className="flex items-center justify-between mb-4">
@@ -256,7 +256,7 @@ export function Upload() {
             </div>
 
             {/* Result Traceability */}
-            <div className="p-6 rounded-lg border bg-card">
+            <div id="validation" className="p-6 rounded-lg border bg-card">
               <h2 className="font-semibold mb-4">Result Traceability</h2>
               <p className="text-sm text-muted-foreground mb-4">
                 Every result includes full provenance tracking:

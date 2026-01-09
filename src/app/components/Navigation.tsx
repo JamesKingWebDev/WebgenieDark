@@ -15,9 +15,9 @@ const navLinks = [
     path: '/dashboard',
     items: [
       { label: 'Overview', path: '/dashboard' },
-      { label: 'Metrics Summary', path: '/dashboard/metrics' },
-      { label: 'System Stats', path: '/dashboard/stats' },
-      { label: 'Activity Log', path: '/dashboard/activity' },
+      { label: 'Metrics Summary', path: '/dashboard#metrics' },
+      { label: 'System Stats', path: '/dashboard#stats' },
+      { label: 'Activity Log', path: '/dashboard#activity' },
     ],
   },
   {
@@ -25,8 +25,8 @@ const navLinks = [
     path: '/datasets',
     items: [
       { label: 'All Datasets', path: '/datasets' },
-      { label: 'Organism View', path: '/datasets/organism' },
-      { label: 'Dataset Metadata', path: '/datasets/metadata' },
+      { label: 'Organism View', path: '/datasets#organism' },
+      { label: 'Dataset Metadata', path: '/datasets#metadata' },
       { label: 'Upload Dataset', path: '/upload' },
     ],
   },
@@ -35,9 +35,9 @@ const navLinks = [
     path: '/compare',
     items: [
       { label: 'Algorithm Comparison', path: '/compare' },
-      { label: 'Metric Explorer', path: '/compare/metrics' },
-      { label: 'PR/ROC Overlay', path: '/compare/roc' },
-      { label: 'Benchmark History', path: '/compare/history' },
+      { label: 'Metric Explorer', path: '/compare#metrics' },
+      { label: 'PR/ROC Overlay', path: '/compare#roc' },
+      { label: 'Benchmark History', path: '/compare#history' },
     ],
   },
   {
@@ -45,9 +45,9 @@ const navLinks = [
     path: '/explorer',
     items: [
       { label: 'Network Explorer', path: '/explorer' },
-      { label: 'Gene Search', path: '/explorer/search' },
-      { label: 'Module Discovery', path: '/explorer/modules' },
-      { label: 'Graph Layouts', path: '/explorer/layouts' },
+      { label: 'Gene Search', path: '/explorer#search' },
+      { label: 'Module Discovery', path: '/explorer#modules' },
+      { label: 'Graph Layouts', path: '/explorer#layouts' },
     ],
   },
   {
@@ -55,9 +55,9 @@ const navLinks = [
     path: '/upload',
     items: [
       { label: 'Upload Predictions', path: '/upload' },
-      { label: 'Job Queue', path: '/upload/queue' },
-      { label: 'File Templates', path: '/upload/templates' },
-      { label: 'Validation Reports', path: '/upload/validation' },
+      { label: 'Job Queue', path: '/upload#queue' },
+      { label: 'File Templates', path: '/upload#templates' },
+      { label: 'Validation Reports', path: '/upload#validation' },
     ],
   },
 ];

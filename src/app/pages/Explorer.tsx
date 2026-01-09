@@ -274,7 +274,7 @@ export function Explorer() {
         <div className="lg:col-span-3 space-y-4">
           <Card className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-foreground">Network Visualization</h3>
+              <h3 id="f" className="text-foreground">Network Visualization</h3>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={handleZoomIn}>
                   <ZoomIn className="w-4 h-4" />

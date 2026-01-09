@@ -155,7 +155,7 @@ export function Home() {
       {/* Hero Section */}
       
       <section className="relative overflow-hidden border-b">
-        <div className="container px-4 py-24">
+        <div className="container px-4 py-24 grid md:grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6">
               Benchmark Gene Regulatory
@@ -183,6 +183,57 @@ export function Home() {
               </Link>
             </div>
           </div>
+          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+                {/* Network Visualization Preview */}
+                <div className="relative h-[400px] flex items-center justify-center">
+                  <svg width="100%" height="100%" viewBox="0 0 400 400">
+                    {/* Central node */}
+                    <circle cx="200" cy="200" r="20" fill="var(--color-primary)" opacity="0.9" />
+                    
+                    {/* Surrounding nodes and edges */}
+                    {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
+                      const angle = (i * Math.PI * 2) / 8;
+                      const x = 200 + Math.cos(angle) * 120;
+                      const y = 200 + Math.sin(angle) * 120;
+                      return (
+                        <g key={i}>
+                          <line
+                            x1="200"
+                            y1="200"
+                            x2={x}
+                            y2={y}
+                            stroke="var(--color-accent)"
+                            strokeWidth="2"
+                            opacity="0.4"
+                          />
+                          <circle cx={x} cy={y} r="12" fill="var(--color-accent)" opacity="0.8" />
+                        </g>
+                      );
+                    })}
+                    
+                    {/* Outer ring nodes */}
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => {
+                      const angle = (i * Math.PI * 2) / 12;
+                      const x = 200 + Math.cos(angle) * 180;
+                      const y = 200 + Math.sin(angle) * 180;
+                      return (
+                        <circle key={`outer-${i}`} cx={x} cy={y} r="8" fill="var(--color-blue)" opacity="0.6" />
+                      );
+                    })}
+                  </svg>
+                  
+                  {/* Floating metric cards */}
+                  <div className="absolute top-4 right-4 bg-white px-3 py-2 rounded-lg shadow-lg border border-gray-200">
+                    <div className="text-xs text-gray-500">AUPRC</div>
+                    <div className="font-semibold text-green-600">0.847</div>
+                  </div>
+                  
+                  <div className="absolute bottom-4 left-4 bg-white px-3 py-2 rounded-lg shadow-lg border border-gray-200">
+                    <div className="text-xs text-gray-500">AUROC</div>
+                    <div className="font-semibold text-purple-600">0.923</div>
+                  </div>
+                </div>
+              </div>
         </div>
       </section>
 
@@ -328,15 +379,15 @@ export function Home() {
       <footer className="border-t py-8">
         <div className="container px-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <div>© 2026 BEELINE Platform. All rights reserved.</div>
+            <div>© 2026 WebGenie | Built on the BEELINE Platform. All rights reserved.</div>
             <div className="flex gap-6">
               <a href="#" className="hover:text-foreground transition-colors">
                 Documentation
               </a>
-              <a href="#" className="hover:text-foreground transition-colors">
+              <a href="https://github.com/Murali-group/Beeline" className="hover:text-foreground transition-colors">
                 GitHub
               </a>
-              <a href="#" className="hover:text-foreground transition-colors">
+              <a href="https://github.com/ukanduchimeremezejames/WebgenieDark" className="hover:text-foreground transition-colors">
                 Contact
               </a>
             </div>
