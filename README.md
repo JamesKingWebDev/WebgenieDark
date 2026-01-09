@@ -8,6 +8,4 @@
   Run `npm i` to install the dependencies.
 
   Run `npm run dev` to start the development server.
-  navigate to '/explorer' to see the changes.
-
-  I'll send another update before the end of the day. That will be for the algorithm page.
+  navigate to '/explorer', '/algorithm' '/' pages to see the updates so far. There are few more changes that I'm making to get ready for Tuesday's meeting with your supervisor.
