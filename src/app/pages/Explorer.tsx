@@ -11,7 +11,7 @@ import { Badge } from '../components/ui/badge';
 import { mockNetworkData } from '.././components/mockData';
 import CytoscapeComponent from 'react-cytoscapejs';
 import cytoscape from 'cytoscape';
-
+import GraphML from 'cytoscape-graphml';
 export function Explorer() {
   const [searchTerm, setSearchTerm] = useState('');
   const [edgeFilter, setEdgeFilter] = useState('all');
@@ -123,44 +123,75 @@ export function Explorer() {
     }
   };
 
-  const handleExport = () => {
-    if (cyRef.current) {
-      const png = cyRef.current.png({ full: true, scale: 2 });
-      const link = document.createElement('a');
-      link.download = 'network.png';
-      link.href = png;
-      link.click();
-    }
-  };
+  // Export PNG (existing)
+const handleExportPNG = () => {
+  if (cyRef.current) {
+    const png = cyRef.current.png({ full: true, scale: 2 });
+    const link = document.createElement('a');
+    link.download = 'network.png';
+    link.href = png;
+    link.click();
+  }
+};
 
-  const handleExportPNG = () => {
-    if (cyRef.current) {
-      const png = cyRef.current.png({ full: true, scale: 2 });
-      const link = document.createElement('a');
-      link.download = 'network.png';
-      link.href = png;
-      link.click();
-    }
-  };
-  const handleExportSVG = () => {
-    if (cyRef.current) {
-      const png = cyRef.current.svg({ full: true, scale: 2 });
-      const link = document.createElement('a');
-      link.download = 'network.svg';
-      link.href = svg;
-      link.click();
-    }
-  };
+// -------------------- New Export Handlers --------------------
 
-  const handleExportGraphML = () => {
-    if (cyRef.current) {
-      const png = cyRef.current.graphml({ full: true, scale: 2 });
-      const link = document.createElement('a');
-      link.download = 'network.graphml';
-      link.href = graphml;
-      link.click();
-    }
-  };
+// Export SVG
+const handleExportSVG = () => {
+  if (cyRef.current) {
+    const svg = cyRef.current.svg({ full: true }); // Cytoscape.js SVG export
+    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const link = document.createElement('a');
+    link.download = 'network.svg';
+    link.href = URL.createObjectURL(blob);
+    link.click();
+  }
+};
+
+// Export CSV (nodes and edges)
+const handleExportCSV = () => {
+  if (cyRef.current) {
+    const nodes = cyRef.current.nodes().map((n) => ({
+      id: n.id(),
+      label: n.data('label') || '',
+      ...n.data(),
+    }));
+    const edges = cyRef.current.edges().map((e) => ({
+      source: e.source().id(),
+      target: e.target().id(),
+      ...e.data(),
+    }));
+
+    // Convert nodes and edges to CSV format
+    const arrayToCSV = (arr: Record<string, any>[]) => {
+      if (!arr.length) return '';
+      const headers = Object.keys(arr[0]);
+      const rows = arr.map((row) =>
+        headers.map((h) => JSON.stringify(row[h] ?? '')).join(',')
+      );
+      return [headers.join(','), ...rows].join('\n');
+    };
+
+    const csvContent = `# Nodes\n${arrayToCSV(nodes)}\n\n# Edges\n${arrayToCSV(edges)}`;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const link = document.createElement('a');
+    link.download = 'network.csv';
+    link.href = URL.createObjectURL(blob);
+    link.click();
+  }
+};
+
+// Export GraphML
+const handleExportGraphML = () => {
+  if (cyRef.current) {
+    const graphml = cyRef.current.graphml(); // Requires cytoscape-graphml extension
+    const blob = new Blob([graphml], { type: 'application/xml;charset=utf-8' });
+    const link = document.createElement('a');
+    link.download = 'network.graphml';
+    link.href = URL.createObjectURL(blob);
+    link.click();
+  }
+};
 
   return (
     <div className="min-h-screen py-8">
@@ -314,7 +345,7 @@ export function Explorer() {
                 <Button variant="outline" size="sm" onClick={handleFit}>
                   <Maximize2 className="w-4 h-4" />
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExport}>
+                <Button variant="outline" size="sm" onClick={handleExportPNG}>
                   <Download className="w-4 h-4" />
                 </Button>
                 <Button variant="outline" size="sm">
