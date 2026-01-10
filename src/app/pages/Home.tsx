@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-// import { ArrowRight, Network, BarChart3, Zap, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Database, 
@@ -59,6 +58,16 @@ export function Home() {
       icon: <Download className="w-6 h-6" />,
       title: 'Exportable Reports & Metrics',
       description: 'Export comprehensive CSV reports and publication-ready figures with full metric breakdowns'
+    },
+    {
+      icon: <Code className="w-6 h-6" />,
+      title: 'Test and Evaluate',
+      description: 'Conduct a systematic evaluation of the strengths, limitations, and context-specific applicability of each gene regulatory algorithm.'
+    },
+    {
+      icon: <Microscope className="w-6 h-6" />,
+      title: 'A web-based preprocessing protocol',
+      description: 'Enabling standardized and reproducible benchmarking of gene regulatory algorithms.'
     }
   ];
 
@@ -149,11 +158,11 @@ export function Home() {
     }
   ];
 
-  
+  // ---- Start Rendering ----
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      
+
+      {/* -------------------- Original Home Hero -------------------- */}
       <section className="relative overflow-hidden border-b">
         <div className="container px-4 py-24 grid md:grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="max-w-3xl mx-auto text-center">
@@ -164,9 +173,27 @@ export function Home() {
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              BEELINE provides a comprehensive benchmarking framework for evaluating
+              <strong>WebGenie</strong> provides a comprehensive benchmarking framework for evaluating
               gene regulatory network inference algorithms on single-cell data.
-            </p>
+            </p>{/* -------------------- Getting Started Section -------------------- */}
+            <div className="space-y-5 flex items-center">
+              {['Browse Datasets','Upload Predictions','Compare & Analyze'].map((title, idx) => (
+                <div key={idx} className="flex items-center gap-4 items-start">
+                  <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0 font-semibold">
+                    {idx+1}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1 text-left">{title}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {title === 'Browse Datasets' ? 'Explore our curated collection of single-cell RNA-seq datasets across multiple organisms'
+                      : title === 'Upload Predictions' ? 'Submit your algorithm\'s predictions using our standardized file format'
+                      : 'View comprehensive metrics and compare your results against established baselines'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+      
             <div className="flex items-center justify-center gap-4">
               <Link
                 to="/dashboard"
@@ -184,108 +211,60 @@ export function Home() {
             </div>
           </div>
           <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-                {/* Network Visualization Preview */}
-                <div className="relative h-[400px] flex items-center justify-center">
-                  <svg width="100%" height="100%" viewBox="0 0 400 400">
-                    {/* Central node */}
-                    <circle cx="200" cy="200" r="20" fill="var(--color-primary)" opacity="0.9" />
-                    
-                    {/* Surrounding nodes and edges */}
-                    {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
-                      const angle = (i * Math.PI * 2) / 8;
-                      const x = 200 + Math.cos(angle) * 120;
-                      const y = 200 + Math.sin(angle) * 120;
-                      return (
-                        <g key={i}>
-                          <line
-                            x1="200"
-                            y1="200"
-                            x2={x}
-                            y2={y}
-                            stroke="var(--color-accent)"
-                            strokeWidth="2"
-                            opacity="0.4"
-                          />
-                          <circle cx={x} cy={y} r="12" fill="var(--color-accent)" opacity="0.8" />
-                        </g>
-                      );
-                    })}
-                    
-                    {/* Outer ring nodes */}
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => {
-                      const angle = (i * Math.PI * 2) / 12;
-                      const x = 200 + Math.cos(angle) * 180;
-                      const y = 200 + Math.sin(angle) * 180;
-                      return (
-                        <circle key={`outer-${i}`} cx={x} cy={y} r="8" fill="var(--color-blue)" opacity="0.6" />
-                      );
-                    })}
-                  </svg>
-                  
-                  {/* Floating metric cards */}
-                  <div className="absolute top-4 right-4 bg-white px-3 py-2 rounded-lg shadow-lg border border-gray-200">
-                    <div className="text-xs text-gray-500">AUPRC</div>
-                    <div className="font-semibold text-green-600">0.847</div>
-                  </div>
-                  
-                  <div className="absolute bottom-4 left-4 bg-white px-3 py-2 rounded-lg shadow-lg border border-gray-200">
-                    <div className="text-xs text-gray-500">AUROC</div>
-                    <div className="font-semibold text-purple-600">0.923</div>
-                  </div>
-                </div>
+            {/* Network Visualization Preview */}
+            <div className="relative h-[400px] flex items-center justify-center">
+              <svg width="100%" height="100%" viewBox="0 0 400 400">
+                <circle cx="200" cy="200" r="20" fill="var(--color-primary)" opacity="0.9" />
+                {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
+                  const angle = (i * Math.PI * 2) / 8;
+                  const x = 200 + Math.cos(angle) * 120;
+                  const y = 200 + Math.sin(angle) * 120;
+                  return (
+                    <g key={i}>
+                      <line x1="200" y1="200" x2={x} y2={y} stroke="var(--color-accent)" strokeWidth="2" opacity="0.4" />
+                      <circle cx={x} cy={y} r="12" fill="var(--color-accent)" opacity="0.8" />
+                    </g>
+                  );
+                })}
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => {
+                  const angle = (i * Math.PI * 2) / 12;
+                  const x = 200 + Math.cos(angle) * 180;
+                  const y = 200 + Math.sin(angle) * 180;
+                  return <circle key={`outer-${i}`} cx={x} cy={y} r="8" fill="var(--color-blue)" opacity="0.6" />;
+                })}
+              </svg>
+              <div className="absolute top-4 right-4 bg-white px-3 py-2 rounded-lg shadow-lg border border-gray-200">
+                <div className="text-xs text-gray-500">AUPRC</div>
+                <div className="font-semibold text-green-600">0.847</div>
               </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 border-b">
-        <div className="container px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-lg border bg-card">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <Network className="w-6 h-6 text-primary" />
+              <div className="absolute bottom-4 left-4 bg-white px-3 py-2 rounded-lg shadow-lg border border-gray-200">
+                <div className="text-xs text-gray-500">AUROC</div>
+                <div className="font-semibold text-purple-600">0.923</div>
               </div>
-              <h3 className="font-semibold mb-2">Network Analysis</h3>
-              <p className="text-sm text-muted-foreground">
-                Interactive visualization and analysis of gene regulatory networks
-              </p>
-            </div>
-
-            <div className="p-6 rounded-lg border bg-card">
-              <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
-                <BarChart3 className="w-6 h-6 text-secondary" />
-              </div>
-              <h3 className="font-semibold mb-2">Performance Metrics</h3>
-              <p className="text-sm text-muted-foreground">
-                Comprehensive evaluation with AUROC, AUPRC, and custom metrics
-              </p>
-            </div>
-
-            <div className="p-6 rounded-lg border bg-card">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <Zap className="w-6 h-6 text-primary" />
-              </div>
-              <h3 className="font-semibold mb-2">Fast Processing</h3>
-              <p className="text-sm text-muted-foreground">
-                Optimized algorithms for quick benchmarking and comparison
-              </p>
-            </div>
-
-            <div className="p-6 rounded-lg border bg-card">
-              <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
-                <Shield className="w-6 h-6 text-secondary" />
-              </div>
-              <h3 className="font-semibold mb-2">Reproducible</h3>
-              <p className="text-sm text-muted-foreground">
-                Standardized protocols ensure consistent and reproducible results
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Visual Preview Section */}
+      {/* -------------------- Features Section -------------------- */}
+      <section className="py-20 border-b">
+        <div className="container px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((f, idx) => (
+              <div key={idx} className="p-6 rounded-lg border bg-card">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  {f.icon}
+                </div>
+                <h3 className="font-semibold mb-2">{f.title}</h3>
+                <p className="text-sm text-muted-foreground">{f.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* -------------------- Visual Preview Section -------------------- */}
       <section className="py-20 border-b">
         <div className="container px-4">
           <div className="max-w-5xl mx-auto">
@@ -302,7 +281,6 @@ export function Home() {
                   Compare multiple algorithms side-by-side with detailed performance metrics
                 </p>
               </div>
-
               <div className="rounded-lg border bg-card p-6">
                 <h3 className="font-semibold mb-4">Network Visualization</h3>
                 <div className="h-48 rounded bg-muted flex items-center justify-center">
@@ -317,51 +295,28 @@ export function Home() {
         </div>
       </section>
 
-      {/* Getting Started Section */}
+      {/* -------------------- Getting Started Section -------------------- */}
       <section className="py-20">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Get Started</h2>
             <div className="space-y-6">
-              <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0 font-semibold">
-                  1
+              {['Browse Datasets','Upload Predictions','Compare & Analyze'].map((title, idx) => (
+                <div key={idx} className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0 font-semibold">
+                    {idx+1}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{title}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {title === 'Browse Datasets' ? 'Explore our curated collection of single-cell RNA-seq datasets across multiple organisms'
+                      : title === 'Upload Predictions' ? 'Submit your algorithm\'s predictions using our standardized file format'
+                      : 'View comprehensive metrics and compare your results against established baselines'}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Browse Datasets</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Explore our curated collection of single-cell RNA-seq datasets across
-                    multiple organisms
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0 font-semibold">
-                  2
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Upload Predictions</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Submit your algorithm's predictions using our standardized file format
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0 font-semibold">
-                  3
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Compare & Analyze</h3>
-                  <p className="text-sm text-muted-foreground">
-                    View comprehensive metrics and compare your results against established
-                    baselines
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
-
             <div className="mt-12 text-center">
               <Link
                 to="/upload"
@@ -375,25 +330,123 @@ export function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="container px-4">
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <div>© 2026 WebGenie | Built on the BEELINE Platform. All rights reserved.</div>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-foreground transition-colors">
-                Documentation
-              </a>
-              <a href="https://github.com/Murali-group/Beeline" className="hover:text-foreground transition-colors">
-                GitHub
-              </a>
-              <a href="https://github.com/ukanduchimeremezejames/WebgenieDark" className="hover:text-foreground transition-colors">
-                Contact
-              </a>
+{/* -------------------- APPENDED LANDINGPAGE CONTENT -------------------- */}
+<section className="py-20 bg-background dark:bg-background-dark">
+  <div className="max-w-[1400px] mx-auto px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-foreground dark:text-foreground-dark mb-4">Who It's For</h2>
+      <p className="text-xl text-muted-foreground dark:text-muted-foreground-dark max-w-2xl mx-auto">
+        Built for researchers and developers across the bioinformatics community
+      </p>
+    </div>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {targetAudience.map((audience, idx) => (
+        <div key={idx} className="text-center p-6 bg-card dark:bg-card-dark rounded-lg">
+          <div className="w-16 h-16 rounded-full bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-300 mx-auto mb-4">
+            {audience.icon}
+          </div>
+          <h4 className="text-foreground dark:text-foreground-dark mb-2">{audience.title}</h4>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground-dark leading-relaxed">
+            {audience.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section className="py-20 bg-gradient-to-br from-purple-50 via-white to-green-50 dark:from-purple-900/20 dark:via-background-dark dark:to-green-900/20">
+  <div className="max-w-[1400px] mx-auto px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-foreground dark:text-foreground-dark mb-4">Getting To Know More</h2>
+      <p className="text-xl text-muted-foreground dark:text-muted-foreground-dark max-w-2xl mx-auto">
+        Choose your path and start exploring WebGenie today
+      </p>
+    </div>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {quickLinks.map((link, idx) => (
+        <div 
+          key={idx} 
+          className="bg-card dark:bg-card-dark p-6 rounded-xl border border-border dark:border-border-dark hover:shadow-lg transition-all cursor-pointer group"
+          onClick={link.action}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-300 group-hover:bg-purple-100 dark:group-hover:bg-purple-800 transition-colors">
+              {link.icon}
             </div>
+            <h4 className="text-foreground dark:text-foreground-dark">{link.title}</h4>
+          </div>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground-dark mb-4">
+            {link.description}
+          </p>
+          <div className="flex items-center gap-2 text-purple-600 dark:text-purple-300 text-sm group-hover:gap-3 transition-all">
+            <span>Get started</span>
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+
+      {/* -------------------- LANDINGPAGE FOOTER -------------------- */}
+      <footer className="bg-gray-900 text-gray-300 py-12">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="text-white">WebGenie</div>
+                  <div className="text-xs text-gray-400">Benchmarking Platform</div>
+                </div>
+              </div>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Research-grade GRN inference benchmarking and visualization for evaluating
+              gene regulatory network inference algorithms on single-cell data.
+              </p>
+            </div>
+            
+            <div>
+              <h5 className="text-white mb-4">Platform</h5>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
+                <li><a href="/datasets" className="hover:text-white transition-colors">Datasets</a></li>
+                <li><a href="/compare" className="hover:text-white transition-colors">Algorithms</a></li>
+                <li><a href="/upload" className="hover:text-white transition-colors">Upload</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h5 className="text-white mb-4">Resources</h5>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><a href="https://github.com/Murali-group/Beeline" className="hover:text-white transition-colors">GitHub</a></li>
+                <li><a href="https://github.com/ukanduchimeremezejames/WebgenieDark" className="hover:text-white transition-colors">Contact</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h5 className="text-white mb-4">Subscribe</h5>
+              <p className="text-sm text-gray-400 mb-2">Get updates about new datasets and algorithms</p>
+              <form className="flex gap-2">
+                <input type="email" placeholder="Email" className="flex-1 p-2 rounded-lg border border-gray-700 bg-gray-800 text-white text-sm" />
+                <button type="submit" className="px-4 py-2 bg-purple-600 rounded-lg text-white text-sm hover:bg-purple-700 transition-colors">Subscribe</button>
+              </form>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-700 pt-6 text-center text-sm">
+            © 2026 WebGenie | Built on the BEELINE Platform. All rights reserved.
           </div>
         </div>
       </footer>
+
     </div>
   );
 }

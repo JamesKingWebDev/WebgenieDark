@@ -133,6 +133,35 @@ export function Explorer() {
     }
   };
 
+  const handleExportPNG = () => {
+    if (cyRef.current) {
+      const png = cyRef.current.png({ full: true, scale: 2 });
+      const link = document.createElement('a');
+      link.download = 'network.png';
+      link.href = png;
+      link.click();
+    }
+  };
+  const handleExportSVG = () => {
+    if (cyRef.current) {
+      const png = cyRef.current.svg({ full: true, scale: 2 });
+      const link = document.createElement('a');
+      link.download = 'network.svg';
+      link.href = svg;
+      link.click();
+    }
+  };
+
+  const handleExportGraphML = () => {
+    if (cyRef.current) {
+      const png = cyRef.current.graphml({ full: true, scale: 2 });
+      const link = document.createElement('a');
+      link.download = 'network.graphml';
+      link.href = graphml;
+      link.click();
+    }
+  };
+
   return (
     <div className="min-h-screen py-8">
       <div className="container px-4">
@@ -456,19 +485,19 @@ export function Explorer() {
               <div className="mt-6">
                 <h4 className="font-semibold text-sm mb-3">Export</h4>
                 <div className="space-y-2">
-                  <button onClick={handleExport} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
+                  <button onClick={handleExportPNG} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
                     <Download className="w-4 h-4" />
                     Export as PNG
                   </button>
-                  <button onClick={handleExport} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
+                  <button onClick={handleExportSVG} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
                     <Download className="w-4 h-4" />
                     Export as SVG
                   </button>
-                  <button onClick={handleExport} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
+                  <button onClick={handleExportCSV} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
                     <Download className="w-4 h-4" />
                     Download Edge List (CSV)
                   </button>
-                  <button onClick={handleExport} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
+                  <button onClick={handleExportGraphML} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
                     <Download className="w-4 h-4" />
                     Download GraphML
                   </button>
