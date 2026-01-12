@@ -66,7 +66,7 @@ const stats = [
 
 export function Datasets() {
   return (
-    <div className="min-h-screen py-20 pb-0">
+    <div id="all" className="min-h-screen py-20 pb-0">
       <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -82,13 +82,13 @@ export function Datasets() {
             <div key={stat.label} className="p-6 rounded-lg border bg-card">
               <div className="text-sm text-muted-foreground mb-1">{stat.label}</div>
               <div className="text-2xl font-bold mb-1">{stat.value}</div>
-              <div className="text-xs text-muted-foreground">{stat.change}</div>
+              <div id="search" className="text-xs text-muted-foreground">{stat.change}</div>
             </div>
           ))}
         </div>
 
         {/* Filters & Search */}
-        <div className="flex gap-4 mb-6">
+        <div  className="flex gap-4 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
@@ -104,7 +104,7 @@ export function Datasets() {
         </div>
 
         {/* Dataset Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="metadata" className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {datasets.map((dataset) => (
             <div
               key={dataset.id}

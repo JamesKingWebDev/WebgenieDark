@@ -36,7 +36,7 @@ const recentJobs = [
 
 export function Upload() {
   return (
-    <div className="min-h-screen py-20 pb-0">
+    <div id='upload' className="min-h-screen py-20 pb-0">
       <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -90,7 +90,7 @@ export function Upload() {
             <div className="p-4 rounded-lg bg-secondary/10 border border-secondary/20">
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-5 h-5 text-secondary mt-0.5" />
-                <div>
+                <div id='file'>
                   <h3 className="font-semibold text-sm mb-1">Run Comparisons</h3>
                   <p className="text-sm text-muted-foreground">
                     Users who can run benchmarks: <strong>All authenticated users</strong>
@@ -116,7 +116,7 @@ export function Upload() {
             </div>
 
             {/* Job Configuration */}
-            <div className="p-6 rounded-lg border bg-card">
+            <div id='config' className="p-6 rounded-lg border bg-card">
               <h2 className="font-semibold mb-4">Job Configuration</h2>
               <div className="space-y-4">
                 <div>
@@ -180,7 +180,7 @@ export function Upload() {
           </div>
 
           {/* File Format & Recent Jobs */}
-          <div id="templates" className="space-y-4">
+          <div id="formats" className="space-y-4">
             {/* Expected Format */}
             <div className="p-6 rounded-lg border bg-card">
               <div className="flex items-center justify-between mb-4">
@@ -215,7 +215,7 @@ export function Upload() {
             </div>
 
             {/* Recent Jobs */}
-            <div className="p-6 rounded-lg border bg-card">
+            <div id='recent' className="p-6 rounded-lg border bg-card">
               <h2 className="font-semibold mb-4">Recent Jobs</h2>
               <div className="space-y-3">
                 {recentJobs.map((job) => (
@@ -256,7 +256,7 @@ export function Upload() {
             </div>
 
             {/* Result Traceability */}
-            <div id="validation" className="p-6 rounded-lg border bg-card">
+            <div id="report" className="p-6 rounded-lg border bg-card">
               <h2 className="font-semibold mb-4">Result Traceability</h2>
               <p className="text-sm text-muted-foreground mb-4">
                 Every result includes full provenance tracking:

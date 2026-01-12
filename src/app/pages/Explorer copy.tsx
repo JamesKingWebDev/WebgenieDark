@@ -12,8 +12,8 @@ import { mockNetworkData } from '.././components/mockData';
 import CytoscapeComponent from 'react-cytoscapejs';
 import cytoscape from 'cytoscape';
 import GraphML from 'cytoscape-graphml';
+import JSZip from "jszip";
 import { saveAs } from "file-saver";
-
 export function Explorer() {
   const [searchTerm, setSearchTerm] = useState('');
   const [edgeFilter, setEdgeFilter] = useState('all');
@@ -126,39 +126,159 @@ export function Explorer() {
   };
 
   // Export PNG (existing)
-const handleExportPNG = () => {
-  if (cyRef.current) {
-    const png = cyRef.current.png({ full: true, scale: 2 });
-    const link = document.createElement('a');
-    link.download = 'network.png';
-    link.href = png;
-    link.click();
-  }
-};
-
-// const handleExportJSON = () => {
-//     if (!cy.current) return;
-//     const json = cy.current.json();
-//     const blob = new Blob([JSON.stringify(json, null, 2)], {
-//       type: "application/json",
-//     });
-//     saveAs(blob, "network.json");
-//   };
+// const handleExportPNG = () => {
+//   if (cyRef.current) {
+//     const png = cyRef.current.png({ full: true, scale: 2 });
+//     const link = document.createElement('a');
+//     link.download = 'network.png';
+//     link.href = png;
+//     link.click();
+//   }
+// };
 
 // -------------------- New Export Handlers --------------------
 
 // Export SVG
-const handleExportSVG = () => {
-  if (cyRef.current) {
-    const svg = cyRef.current.svg({ full: true }); // Cytoscape.js SVG export
-    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-    const link = document.createElement('a');
-    link.download = 'network.svg';
-    link.href = URL.createObjectURL(blob);
-    link.click();
-  }
+// const handleExportSVG = () => {
+//   if (cyRef.current) {
+//     const svg = cyRef.current.svg({ full: true }); // Cytoscape.js SVG export
+//     const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+//     const link = document.createElement('a');
+//     link.download = 'network.svg';
+//     link.href = URL.createObjectURL(blob);
+//     link.click();
+//   }
+// };
+
+// Export CSV (nodes and edges)
+// const handleExportCSV = () => {
+//   if (cyRef.current) {
+//     const nodes = cyRef.current.nodes().map((n) => ({
+//       id: n.id(),
+//       label: n.data('label') || '',
+//       ...n.data(),
+//     }));
+//     const edges = cyRef.current.edges().map((e) => ({
+//       source: e.source().id(),
+//       target: e.target().id(),
+//       ...e.data(),
+//     }));
+
+//     // Convert nodes and edges to CSV format
+//     const arrayToCSV = (arr: Record<string, any>[]) => {
+//       if (!arr.length) return '';
+//       const headers = Object.keys(arr[0]);
+//       const rows = arr.map((row) =>
+//         headers.map((h) => JSON.stringify(row[h] ?? '')).join(',')
+//       );
+//       return [headers.join(','), ...rows].join('\n');
+//     };
+
+//     const csvContent = `# Nodes\n${arrayToCSV(nodes)}\n\n# Edges\n${arrayToCSV(edges)}`;
+//     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+//     const link = document.createElement('a');
+//     link.download = 'network.csv';
+//     link.href = URL.createObjectURL(blob);
+//     link.click();
+//   }
+// };
+
+// Export GraphML
+// const handleExportGraphML = () => {
+//   if (cyRef.current) {
+//     const graphml = cyRef.current.graphml(); // Requires cytoscape-graphml extension
+//     const blob = new Blob([graphml], { type: 'application/xml;charset=utf-8' });
+//     const link = document.createElement('a');
+//     link.download = 'network.graphml';
+//     link.href = URL.createObjectURL(blob);
+//     link.click();
+//   }
+// };
+
+// ----------------------------------------------------------
+// PNG EXPORT
+// ----------------------------------------------------------
+const handleExportPNG = () => {
+  if (!cyRef.current) return;
+  const png = cyRef.current.png({ full: true, scale: 2 });
+
+  const link = document.createElement("a");
+  link.download = "network.png";
+  link.href = png;
+  link.click();
 };
 
+
+// ----------------------------------------------------------
+// SVG EXPORT
+// ----------------------------------------------------------
+const handleExportSVG = () => {
+  if (!cyRef.current) return;
+
+  const svg = cyRef.current.svg({ full: true });
+  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  saveAs(blob, "network.svg");
+};
+
+
+// ----------------------------------------------------------
+// CSV EXPORT (nodes + edges)
+// ----------------------------------------------------------
+const handleExportCSV = () => {
+  if (!cyRef.current) return;
+
+  const cy = cyRef.current;
+
+  const nodes = cy.nodes().map((n) => ({
+    id: n.id(),
+    label: n.data("label") || "",
+    ...n.data(),
+  }));
+
+  const edges = cy.edges().map((e) => ({
+    id: e.id(),
+    source: e.source().id(),
+    target: e.target().id(),
+    ...e.data(),
+  }));
+
+  const convertToCSV = (data) => {
+    if (!data.length) return "";
+    const headers = Object.keys(data[0]);
+    const rows = data.map((obj) =>
+      headers.map((h) => JSON.stringify(obj[h] ?? "")).join(",")
+    );
+    return headers.join(",") + "\n" + rows.join("\n");
+  };
+
+  const csvText = [
+    "# NODES",
+    convertToCSV(nodes),
+    "",
+    "# EDGES",
+    convertToCSV(edges),
+  ].join("\n");
+
+  const blob = new Blob([csvText], { type: "text/csv;charset=utf-8" });
+  saveAs(blob, "network.csv");
+};
+
+
+// ----------------------------------------------------------
+// GRAPHML EXPORT
+// ----------------------------------------------------------
+const handleExportGraphML = () => {
+  if (!cyRef.current) return;
+
+  const xml = cyRef.current.graphml();
+  const blob = new Blob([xml], { type: "application/xml;charset=utf-8" });
+  saveAs(blob, "network.graphml");
+};
+
+
+// ----------------------------------------------------------
+// JSON EXPORT (full graph)
+// ----------------------------------------------------------
 const handleExportJSON = () => {
   if (!cyRef.current) return;
 
@@ -169,49 +289,75 @@ const handleExportJSON = () => {
   saveAs(blob, "network.json");
 };
 
-// Export CSV (nodes and edges)
-const handleExportCSV = () => {
-  if (cyRef.current) {
-    const nodes = cyRef.current.nodes().map((n) => ({
-      id: n.id(),
-      label: n.data('label') || '',
-      ...n.data(),
-    }));
-    const edges = cyRef.current.edges().map((e) => ({
-      source: e.source().id(),
-      target: e.target().id(),
-      ...e.data(),
-    }));
 
-    // Convert nodes and edges to CSV format
-    const arrayToCSV = (arr: Record<string, any>[]) => {
-      if (!arr.length) return '';
-      const headers = Object.keys(arr[0]);
-      const rows = arr.map((row) =>
-        headers.map((h) => JSON.stringify(row[h] ?? '')).join(',')
-      );
-      return [headers.join(','), ...rows].join('\n');
-    };
+// ----------------------------------------------------------
+// ZIP EXPORT (PNG + SVG + CSV + GraphML + JSON)
+// ----------------------------------------------------------
+const handleExportZIP = async () => {
+  if (!cyRef.current) return;
+  const cy = cyRef.current;
 
-    const csvContent = `# Nodes\n${arrayToCSV(nodes)}\n\n# Edges\n${arrayToCSV(edges)}`;
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
-    const link = document.createElement('a');
-    link.download = 'network.csv';
-    link.href = URL.createObjectURL(blob);
-    link.click();
-  }
+  const zip = new JSZip();
+
+  // PNG
+  const png = cy.png({ full: true, scale: 2 });
+  zip.file("network.png", png.split(",")[1], { base64: true });
+
+  // SVG
+  const svg = cy.svg({ full: true });
+  zip.file("network.svg", svg);
+
+  // JSON
+  zip.file("network.json", JSON.stringify(cy.json(), null, 2));
+
+  // CSV
+  const nodes = cy.nodes().map((n) => ({
+    id: n.id(),
+    label: n.data("label") || "",
+    ...n.data(),
+  }));
+
+  const edges = cy.edges().map((e) => ({
+    id: e.id(),
+    source: e.source().id(),
+    target: e.target().id(),
+    ...e.data(),
+  }));
+
+  const convertToCSV = (data) => {
+    if (!data.length) return "";
+    const headers = Object.keys(data[0]);
+    const rows = data.map((obj) =>
+      headers.map((h) => JSON.stringify(obj[h] ?? "")).join(",")
+    );
+    return headers.join(",") + "\n" + rows.join("\n");
+  };
+
+  const csvText = [
+    "# NODES",
+    convertToCSV(nodes),
+    "",
+    "# EDGES",
+    convertToCSV(edges),
+  ].join("\n");
+
+  zip.file("network.csv", csvText);
+
+  // GRAPHML
+  const graphml = cy.graphml();
+  zip.file("network.graphml", graphml);
+
+  // Generate ZIP and download
+  const blob = await zip.generateAsync({ type: "blob" });
+  saveAs(blob, "network_export.zip");
 };
 
-// Export GraphML
-const handleExportGraphML = () => {
-  if (cyRef.current) {
-    const graphml = cyRef.current.graphml(); // Requires cytoscape-graphml extension
-    const blob = new Blob([graphml], { type: 'application/xml;charset=utf-8' });
-    const link = document.createElement('a');
-    link.download = 'network.graphml';
-    link.href = URL.createObjectURL(blob);
-    link.click();
-  }
+
+// ----------------------------------------------------------
+// Optional tiny toast (fallback)
+// ----------------------------------------------------------
+const notify = (msg) => {
+  alert(msg); // replace with toast() if using shadcn or react-hot-toast
 };
 
   return (
@@ -241,7 +387,7 @@ const handleExportGraphML = () => {
           </div>
         </div>
 
-        <div id="search" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div id="search" className="grid lg:grid-cols-4 gap-6">
           {/* Left Sidebar - Controls */}
           <Card className="p-6 lg:col-span-1">
           <div className="space-y-6">
@@ -376,6 +522,8 @@ const handleExportGraphML = () => {
             </div>
 
             <div className="border border-border rounded-lg overflow-hidden bg-white">
+              <div id="cy" ref={cyRef} className="w-full h-[700px] border rounded-md" />
+
               <CytoscapeComponent
                id="details"
                 elements={cytoscapeElements}
@@ -550,12 +698,17 @@ const handleExportGraphML = () => {
                     <Download className="w-4 h-4" />
                     Download Edge List (CSV)
                   </button>
+                  {/* <button onClick={handleExportGraphML} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
+                    <Download className="w-4 h-4" />
+                    Download GraphML
+                  </button> */}
                   <button onClick={handleExportJSON} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
                     <Download className="w-4 h-4" />
                     Download as JSON
                   </button>
-                  {/* <button onClick={handleExportJSON} className="px-3 py-2 bg-primary text-white rounded">
-                    JSON
+                  {/* <button onClick={handleExportZIP} className="w-full flex items-center gap-2 px-3 py-2 text-sm border rounded hover:bg-accent transition-colors">
+                    <Download className="w-4 h-4" />
+                    Export All (ZIP)
                   </button> */}
                 </div>
               </div>

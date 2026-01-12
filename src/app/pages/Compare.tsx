@@ -161,7 +161,7 @@ export function Compare() {
   });
 
   return (
-    <div className="min-h-screen py-20 pb-0">
+    <div id="compare" className="min-h-screen py-20 pb-0">
       <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -172,7 +172,7 @@ export function Compare() {
         </div>
 
         {/* Algorithm Selection */}
-        <Card className="p-6">
+        <Card id="select" className="p-6">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-foreground">Select Algorithms to Compare</h3>
@@ -292,7 +292,7 @@ export function Compare() {
         
       {/* Performance Metrics Table */}
       {selectedMetrics.length > 0 && (
-        <Card>
+        <Card id="metrics" className='mt-5'>
           <div className="p-4 border-b border-border flex items-center justify-between">
             <h3 className="text-foreground">Performance Metrics</h3>
             <div className="flex gap-2">
@@ -350,7 +350,7 @@ export function Compare() {
       
       {/* Visualization Zone */}
       {selectedMetrics.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div id="roc" className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-5">
           {/* Precision-Recall Curve */}
           <Card className="p-6">
             <div className="space-y-4">
@@ -577,7 +577,7 @@ export function Compare() {
         </div> */}
 
         {/* Additional Charts */}
-        <div className="grid lg:grid-cols-2 gap-6 py-5">
+        <div id="enrichment" className="grid lg:grid-cols-2 gap-6 py-5">
           {/* Enrichment */}
           <div className="p-6 rounded-lg border bg-card">
             <div className="mb-6">

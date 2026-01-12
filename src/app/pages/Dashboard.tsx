@@ -51,7 +51,7 @@ const algorithmComparison = [
 
 export function Dashboard() {
   return (
-    <div className="min-h-screen py-20 pb-0">
+    <div id="overview" className="min-h-screen py-20 pb-0">
       <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -102,7 +102,7 @@ export function Dashboard() {
 
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Performance Chart */}
-          <div className="lg:col-span-2 rounded-lg border bg-card p-6">
+          <div id="performance" className="lg:col-span-2 rounded-lg border bg-card p-6">
             <div className="mb-6">
               <h2 className="text-lg font-semibold">Algorithm Performance</h2>
               <p className="text-sm text-muted-foreground">
@@ -144,7 +144,7 @@ export function Dashboard() {
           </div>
 
           {/* Recent Results */}
-          <div className="rounded-lg border bg-card p-6">
+          <div id="recent" className="rounded-lg border bg-card p-6">
             <div className="mb-6">
               <h2 className="text-lg font-semibold">Recent Results</h2>
               <p className="text-sm text-muted-foreground">Latest benchmark runs</p>
@@ -176,7 +176,7 @@ export function Dashboard() {
         </div>
 
         {/* Algorithm Comparison Table */}
-        <div className="mt-6 rounded-lg border bg-card p-6">
+        <div id="comparison" className="mt-6 rounded-lg border bg-card p-6">
           <div className="mb-6">
             <h2 className="text-lg font-semibold">Algorithm Comparison</h2>
             <p className="text-sm text-muted-foreground">
