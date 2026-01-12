@@ -286,7 +286,7 @@ export function Home() {
 
       {/* -------------------- Visual Preview Section -------------------- */}
       <section className="py-20 border-b">
-        <div className="container px-4">
+        <div className="container px-4 mx-auto">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">
               Powerful Benchmarking Tools
