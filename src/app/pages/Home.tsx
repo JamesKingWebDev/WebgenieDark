@@ -164,7 +164,7 @@ export function Home() {
 
       {/* -------------------- Original Home Hero -------------------- */}
       <section className="relative overflow-hidden border-b">
-        <div className="container px-4 py-24 grid md:grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="mx-auto container px-4 py-24 grid md:grid-cols-1 lg:grid-cols-2 gap-12">
   {/* Left: Intro + Steps */}
   <div className="max-w-3xl mx-auto text-center lg:text-left space-y-8">
     <h1 className="text-5xl font-bold mb-6">
@@ -268,7 +268,7 @@ export function Home() {
 
       {/* -------------------- Features Section -------------------- */}
       <section className="py-20 border-b">
-        <div className="container px-4">
+        <div className="container px-4 mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((f, idx) => (
@@ -316,27 +316,38 @@ export function Home() {
       </section>
 
       {/* -------------------- Getting Started Section -------------------- */}
-      <section className="py-20">
-        <div className="container px-4">
+      <section className="py-20 mx-auto border-b">
+        <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Get Started</h2>
-            <div className="space-y-6">
-              {['Browse Datasets','Upload Predictions','Compare & Analyze'].map((title, idx) => (
-                <div key={idx} className="flex gap-4 items-start">
-                  <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0 font-semibold">
-                    {idx+1}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">{title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {title === 'Browse Datasets' ? 'Explore our curated collection of single-cell RNA-seq datasets across multiple organisms'
-                      : title === 'Upload Predictions' ? 'Submit your algorithm\'s predictions using our standardized file format'
-                      : 'View comprehensive metrics and compare your results against established baselines'}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* Cards Section: 3 cards in a row on lg screens */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {[
+        {
+          title: 'Browse Datasets',
+          description: 'Explore our curated collection of single-cell RNA-seq datasets across multiple organisms',
+        },
+        {
+          title: 'Upload Predictions',
+          description: 'Submit your algorithm\'s predictions using our standardized file format',
+        },
+        {
+          title: 'Compare & Analyze',
+          description: 'View comprehensive metrics and compare your results against established baselines',
+        },
+      ].map((item, idx) => (
+        <div
+          key={idx}
+          className="bg-card dark:bg-card-dark border border-border dark:border-border-dark rounded-2xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow"
+        >
+          <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg mb-4">
+            {idx + 1}
+          </div>
+          <h3 className="font-semibold text-lg mb-2 text-foreground dark:text-foreground-dark">{item.title}</h3>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground-dark">{item.description}</p>
+        </div>
+      ))}
+    </div>
             <div className="mt-12 text-center">
               <Link
                 to="/upload"
