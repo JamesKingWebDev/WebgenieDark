@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Moon, Sun, ChevronDown, Bell, Menu, X } from 'lucide-react';
+import { Moon, Sun, Search, ChevronDown, Bell, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import {
@@ -223,10 +223,11 @@ export function Navigation() {
         {/* Right side */}
         <div className="flex items-center gap-4">
           <div className="relative hidden md:block">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
               placeholder="Search datasets, algorithms..."
-              className="w-64 px-3 py-1.5 text-sm bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+              className="pl-10 w-64 px-3 py-1.5 text-sm bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
 

@@ -296,7 +296,7 @@ export function Upload() {
         </div>
       </div>
       {/* -------------------- LANDINGPAGE FOOTER -------------------- */}
-            <footer className="bg-gray-900 text-gray-300 py-12 mt-10">
+            {/* <footer className="bg-gray-900 text-gray-300 py-12 mt-10">
               <div className="max-w-[1400px] mx-auto px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                   <div>
@@ -348,7 +348,7 @@ export function Upload() {
                   © 2026 WebGenie | Built on the BEELINE Platform. All rights reserved.
                 </div>
               </div>
-            </footer>
+            </footer> */}
     </div>
   );
 }

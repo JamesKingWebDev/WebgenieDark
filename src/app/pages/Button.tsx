@@ -10,7 +10,7 @@ interface ButtonProps {
   className?: string;
 }
 
-export function Button({ 
+export function Button2({ 
   children, 
   variant = 'primary', 
   size = 'md', 

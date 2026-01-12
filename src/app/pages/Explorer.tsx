@@ -1,10 +1,12 @@
-import { Network, ZoomIn, ZoomOut, Search, Maximize2, Share2, Maximize, Download, Filter, Play, Activity } from 'lucide-react';
+import { Network, ZoomIn, ZoomOut, Layers, Grid3x3, Circle, Filter, Eye, EyeOff, 
+  Download, Share2, Maximize2, Search,Target, HelpCircle, Play, Info, Sparkles, Maximize,  Activity } from 'lucide-react';
 // import { Slider } from '../components/ui/slider';
 import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Slider } from '../components/ui/slider';
+// import { Badge } from './Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Badge } from '../components/ui/badge';
 // import { Search, Download, Maximize2, Share2, ZoomIn, ZoomOut } from 'lucide-react';
@@ -214,19 +216,121 @@ const handleExportGraphML = () => {
   }
 };
 
+const [layoutType, setLayoutType] = useState<'force' | 'circular' | 'grid' | 'hierarchical'>('force');
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [tfOnlyView, setTfOnlyView] = useState(false);
+  const [showModules, setShowModules] = useState(true);
+  // const [scoreThreshold, setScoreThreshold] = useState(0.5);
+  const [edgeType, setEdgeType] = useState<'all' | 'activation' | 'inhibition'>('all');
+  const [selectedGene, setSelectedGene] = useState('');
+  const [showHelpPanel, setShowHelpPanel] = useState(true);
+
   return (
     <div id="explorer" className="min-h-screen py-20 pb-0">
       <div className="container px-4 mx-auto">
-        {/* Header */}
         <div className="mb-6">
+  <div className="flex items-start justify-between mb-4">
+    <div>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Network Explorer</h1>
+      <p className="text-gray-600 dark:text-gray-300">
+        Interactive exploration of gene regulatory network predictions
+      </p>
+      <div className="flex items-center gap-3 mt-3">
+        <Badge variant="outline" size="sm">
+          <Network className="w-3 h-3 mr-1" />
+          CytoscapeJS Interactive Canvas
+        </Badge>
+        <Badge variant="default" size="sm">
+          Dataset: hESC v2.1.0
+        </Badge>
+        <Badge variant="default" size="sm">
+          Algorithm: GENIE3 v1.12.0
+        </Badge>
+      </div>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <Button 
+        variant="default" 
+        size="sm"
+        // icon={<HelpCircle className="w-4 h-4" />}
+        onClick={() => setShowHelpPanel(!showHelpPanel)}
+      >
+        <HelpCircle className="w-3 h-3 mr-1" />
+        Help
+      </Button>
+      <Button 
+        variant="secondary" 
+        size="sm"
+        // icon={<Share2 className="w-4 h-4" />}
+      >
+        <Share2 className="w-3 h-3 mr-1" />
+        Share
+      </Button>
+      <Button 
+        variant="outline" 
+        size="sm"
+        // icon={<Download className="w-4 h-4" />}
+      >
+        <Download className="w-3 h-3 mr-1" />
+        Export
+      </Button>
+    </div>
+  </div>
+
+  {/* Help Panel */}
+  {showHelpPanel && (
+    <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-6 mb-6">
+      <div className="flex items-start gap-4">
+        <Sparkles className="w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
+        <div className="flex-1">
+          <h3 className="text-blue-900 dark:text-blue-200 mb-3">How to Explore This Network</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800 dark:text-blue-100">
+            <div>
+              <p className="font-medium mb-1">🧬 For Biologists:</p>
+              <ul className="list-disc list-inside space-y-1 text-blue-700 dark:text-blue-200">
+                <li>Click nodes to see gene annotations and regulatory relationships</li>
+                <li>Use the search bar to find specific transcription factors</li>
+                <li>Adjust score threshold to focus on high-confidence edges</li>
+                <li>Toggle "TF-only View" to see transcription factor networks</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-medium mb-1">🔬 Network Interpretation:</p>
+              <ul className="list-disc list-inside space-y-1 text-blue-700 dark:text-blue-200">
+                <li><strong>Edge thickness:</strong> Confidence score of regulation</li>
+                <li><strong>Green edges:</strong> Predicted activation</li>
+                <li><strong>Red edges:</strong> Predicted inhibition</li>
+                <li><strong>Node size:</strong> Number of regulatory connections</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 p-3 bg-blue-100 dark:bg-blue-800 rounded-lg text-sm text-blue-900 dark:text-blue-100">
+            <strong>💡 Tip:</strong> Use "Highlight Neighbors" to focus on regulatory modules around key genes like SOX2, OCT4, or NANOG
+          </div>
+        </div>
+        <button 
+          onClick={() => setShowHelpPanel(false)}
+          className="text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+
+{/* Header */}
+        {/* <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Network Explorer</h1>
           <p className="text-muted-foreground">
             Interactive exploration of gene regulatory network predictions
           </p>
-        </div>
+        </div> */}
 
         {/* Info Banner */}
-        <div className="mb-6 p-4 rounded-lg bg-primary/10 border border-primary/20">
+        {/* <div className="mb-6 p-4 rounded-lg bg-primary/10 border border-primary/20">
           <div className="flex items-start gap-3">
             <Network className="w-5 h-5 text-primary mt-0.5" />
             <div>
@@ -239,7 +343,7 @@ const handleExportGraphML = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div id="search" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Sidebar - Controls */}
@@ -565,7 +669,7 @@ const handleExportGraphML = () => {
       </div>
 
       {/* -------------------- LANDINGPAGE FOOTER -------------------- */}
-            <footer className="bg-gray-900 text-gray-300 py-12 mt-10">
+            {/* <footer className="bg-gray-900 text-gray-300 py-12 mt-10">
               <div className="max-w-[1400px] mx-auto px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                   <div>
@@ -617,7 +721,7 @@ const handleExportGraphML = () => {
                   © 2026 WebGenie | Built on the BEELINE Platform. All rights reserved.
                 </div>
               </div>
-            </footer>
+            </footer> */}
     </div>
   );
 }
