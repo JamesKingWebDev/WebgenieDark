@@ -270,9 +270,10 @@ const [layoutType, setLayoutType] = useState<'force' | 'circular' | 'grid' | 'hi
       <Button 
         variant="outline" 
         size="sm"
+        onClick={handleExportPNG} 
         // icon={<Download className="w-4 h-4" />}
       >
-        <Download className="w-3 h-3 mr-1" />
+        <Download  className="w-3 h-3 mr-1" />
         Export
       </Button>
     </div>
