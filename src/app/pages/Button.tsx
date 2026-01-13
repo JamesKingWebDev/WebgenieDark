@@ -22,7 +22,7 @@ export function Button2({
   const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] shadow-sm',
+    primary: 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-secondary)] shadow-sm',
     secondary: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50',
     ghost: 'text-gray-600 hover:bg-gray-100',
     success: 'bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-dark)] shadow-sm'
