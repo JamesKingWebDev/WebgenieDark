@@ -1,73 +1,6 @@
-import { Filter, Search, Database, Download, Activity, Globe, Layers, Boxes, Dna, Microscope, GitFork, PlayCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { DatasetCard } from './DatasetCard';
-import { Button } from './Button';
-import AnimatedCounter from "./AnimatedCounter";
-
-const datasets = [
-  {
-    id: 1,
-    name: 'HSC_Synthetic_100',
-    organism: 'Mouse',
-    cells: 500,
-    genes: 100,
-    networks: 12,
-    description: 'Synthetic hematopoietic stem cell data',
-  },
-  {
-    id: 2,
-    name: 'mESC_hematopoietic',
-    organism: 'Mouse',
-    cells: 1654,
-    genes: 3934,
-    networks: 10,
-    description: 'Mouse embryonic stem cells differentiating to blood cells',
-  },
-  {
-    id: 3,
-    name: 'hESC_definitive_endoderm',
-    organism: 'Human',
-    cells: 3396,
-    genes: 16834,
-    networks: 8,
-    description: 'Human embryonic stem cell differentiation',
-  },
-  {
-    id: 4,
-    name: 'mDC_GSE48968',
-    organism: 'Mouse',
-    cells: 383,
-    genes: 18215,
-    networks: 6,
-    description: 'Mouse dendritic cell maturation',
-  },
-  {
-    id: 5,
-    name: 'mESC_GSE65525',
-    organism: 'Mouse',
-    cells: 933,
-    genes: 24175,
-    networks: 5,
-    description: 'Mouse embryonic stem cell cultures',
-  },
-  {
-    id: 6,
-    name: 'hESC_GSE75748',
-    organism: 'Human',
-    cells: 1018,
-    genes: 16708,
-    networks: 7,
-    description: 'Human embryonic stem cell time series',
-  },
-];
-
-const stats = [
-  { label: 'Total Datasets', value: '24', change: '+2 this month' },
-  { label: 'Total Cells', value: '47K', change: 'Across all datasets' },
-  { label: 'Organisms', value: '5', change: 'Mouse, Human, Yeast' },
-  { label: 'Networks Available', value: '156', change: 'Ground truth & predicted' },
-];
+import { Filter, Boxes, Layers, Globe, Search, Database, Download, Activity } from 'lucide-react';
+import AnimatedCounter from './AnimatedCounter';
+import { Button } from '../components/ui/button';
 
 const allDatasets = [
   {
@@ -216,8 +149,72 @@ const allDatasets = [
   }
 ];
 
+const datasets = [
+  {
+    id: 1,
+    name: 'HSC_Synthetic_100',
+    organism: 'Mouse',
+    cells: 500,
+    genes: 100,
+    networks: 12,
+    description: 'Synthetic hematopoietic stem cell data',
+  },
+  {
+    id: 2,
+    name: 'mESC_hematopoietic',
+    organism: 'Mouse',
+    cells: 1654,
+    genes: 3934,
+    networks: 10,
+    description: 'Mouse embryonic stem cells differentiating to blood cells',
+  },
+  {
+    id: 3,
+    name: 'hESC_definitive_endoderm',
+    organism: 'Human',
+    cells: 3396,
+    genes: 16834,
+    networks: 8,
+    description: 'Human embryonic stem cell differentiation',
+  },
+  {
+    id: 4,
+    name: 'mDC_GSE48968',
+    organism: 'Mouse',
+    cells: 383,
+    genes: 18215,
+    networks: 6,
+    description: 'Mouse dendritic cell maturation',
+  },
+  {
+    id: 5,
+    name: 'mESC_GSE65525',
+    organism: 'Mouse',
+    cells: 933,
+    genes: 24175,
+    networks: 5,
+    description: 'Mouse embryonic stem cell cultures',
+  },
+  {
+    id: 6,
+    name: 'hESC_GSE75748',
+    organism: 'Human',
+    cells: 1018,
+    genes: 16708,
+    networks: 7,
+    description: 'Human embryonic stem cell time series',
+  },
+];
+
+const stats = [
+  { label: 'Total Datasets', value: '24', change: '+2 this month' },
+  { label: 'Total Cells', value: '47K', change: 'Across all datasets' },
+  { label: 'Organisms', value: '5', change: 'Mouse, Human, Yeast' },
+  { label: 'Networks Available', value: '156', change: 'Ground truth & predicted' },
+];
+
 export function Datasets() {
-  const totalGenes = allDatasets.reduce((sum, d) => sum + d.genes, 0);
+    const totalGenes = allDatasets.reduce((sum, d) => sum + d.genes, 0);
   const totalCells = allDatasets.reduce((sum, d) => sum + d.cells, 0);
   const totalEdges = allDatasets.reduce((sum, d) => sum + d.edges, 0);
 
@@ -265,7 +262,133 @@ export function Datasets() {
           ))}
         </div>
 
-        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+  {/* <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+    <div className="flex items-center gap-3 mb-2">
+      <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+        <Database className="w-4 h-4 text-blue-600" />
+      </div>
+      <h4 className="text-gray-900 font-medium">Total Datasets</h4>
+    </div>
+    <p className="text-sm text-gray-600 mb-2">Number of datasets in the system</p>
+    <AnimatedCounter title="" value={allDatasets.length} className="mt-2" />
+  </div>
+
+  <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+    <div className="flex items-center gap-3 mb-2">
+      <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+        <Globe className="w-4 h-4 text-green-600" />
+      </div>
+      <h4 className="text-gray-900 font-medium">Organisms</h4>
+    </div>
+    <p className="text-sm text-gray-600 mb-2">Unique organisms represented</p>
+    <AnimatedCounter
+      title=""
+      value={new Set(allDatasets.map(d => d.organism)).size}
+      className="mt-2"
+    />
+  </div> */}
+
+  {/* <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+    <div className="flex items-center gap-3 mb-2">
+      <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+        <Layers className="w-4 h-4 text-purple-600" />
+      </div>
+      <h4 className="text-gray-900 font-medium">Types</h4>
+    </div>
+    <p className="text-sm text-gray-600 mb-2">Dataset categories available</p>
+    <AnimatedCounter
+      title=""
+      value={new Set(allDatasets.map(d => d.type)).size}
+      className="mt-2"
+    />
+  </div> */}
+
+  {/* <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+    <div className="flex items-center gap-3 mb-2">
+      <div className="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+        <Boxes className="w-4 h-4 text-yellow-600" />
+      </div>
+      <h4 className="text-gray-900 font-medium">Sources</h4>
+    </div>
+    <p className="text-sm text-gray-600 mb-2">Distinct dataset sources</p>
+    <AnimatedCounter
+      title=""
+      value={new Set(allDatasets.map(d => d.source)).size}
+      className="mt-2"
+    />
+  </div> */}
+
+</div>
+
+      {/* Search and Filters */}
+      <div className="bg-white rounded-lg p-6 border border-gray-200 mb-6">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Search */}
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search datasets by name or organism..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="flex gap-3">
+            <select
+              value={selectedOrganism}
+              onChange={(e) => setSelectedOrganism(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="all">All Organisms</option>
+              <option value="Human">Human</option>
+              <option value="Mouse">Mouse</option>
+              <option value="Yeast">Yeast</option>
+              <option value="Synthetic">Synthetic</option>
+            </select>
+
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="all">All Types</option>
+              <option value="scRNA-seq">scRNA-seq</option>
+              <option value="Bulk RNA-seq">Bulk RNA-seq</option>
+              <option value="ChIP-seq">ChIP-seq</option>
+            </select>
+
+            <select
+              value={selectedSource}
+              onChange={(e) => setSelectedSource(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="all">All Sources</option>
+              <option value="curated">Curated</option>
+              <option value="real">Real</option>
+              <option value="synthetic">Synthetic</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Results Count */}
+      <div className="flex items-center justify-between mb-6">
+        <p className="text-gray-600">
+          Showing <span className="font-medium text-gray-900">{filteredDatasets.length}</span> of{' '}
+          <span className="font-medium text-gray-900">{allDatasets.length}</span> datasets
+        </p>
+        <Button variant="secondary" icon={<SlidersHorizontal className="w-4 h-4" />}>
+          Advanced Filters
+        </Button>
+      </div>
+
 
         {/* Filters & Search */}
         <div  className="flex gap-4 mb-6">
@@ -287,7 +410,6 @@ export function Datasets() {
         <div id="metadata" className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {datasets.map((dataset) => (
             <div
-              onClick={() => navigate(`/dataset/${dataset.id}`)}
               key={dataset.id}
               className="p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow cursor-pointer group"
             >

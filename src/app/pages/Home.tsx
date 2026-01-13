@@ -465,7 +465,7 @@ export function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                   <Activity className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -479,7 +479,7 @@ export function Home() {
               </p>
             </div>
             
-            <div>
+            <div  className='ml-30'>
               <h5 className="text-white mb-4">Platform</h5>
               <ul className="space-y-2 text-sm">
                 <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
@@ -489,7 +489,7 @@ export function Home() {
               </ul>
             </div>
             
-            <div>
+            <div className='ml-30'>
               <h5 className="text-white mb-4">Resources</h5>
               <ul className="space-y-2 text-sm">
                 <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
@@ -503,13 +503,21 @@ export function Home() {
               <p className="text-sm text-gray-400 mb-2">Get updates about new datasets and algorithms</p>
               <form className="flex gap-2">
                 <input type="email" placeholder="Email" className="flex-1 p-2 rounded-lg border border-gray-700 bg-gray-800 text-white text-sm" />
-                <button type="submit" className="px-4 py-2 bg-purple-600 rounded-lg text-white text-sm hover:bg-purple-700 transition-colors">Subscribe</button>
+                <button type="submit" className="px-4 py-2 bg-primary rounded-lg text-white text-sm hover:bg-purple-700 transition-colors">Subscribe</button>
               </form>
             </div>
           </div>
           
-          <div className="border-t border-gray-700 pt-6 text-center text-sm">
+          {/* <div className="border-t border-gray-700 pt-6 text-center text-sm">
             © 2026 WebGenie | Built on the BEELINE Platform. All rights reserved.
+          </div> */}
+          <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+            <p>© 2026 WebGenie Platform. Licensed under MIT. All rights reserved.</p>
+            <p className="flex items-center gap-2">
+              <span>Built upon the </span>
+              <span className="text-primary">BEELINE</span>
+              <span> GRN Benchmarking Platform </span>
+            </p>
           </div>
         </div>
       </footer>

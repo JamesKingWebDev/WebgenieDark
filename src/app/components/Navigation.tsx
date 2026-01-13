@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Moon, Sun, Search, ChevronDown, Bell, Menu, X } from 'lucide-react';
+import { Moon, Activity, User, Sun, Search, ChevronDown, Bell, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import {
@@ -155,7 +155,7 @@ export function Navigation() {
 
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <svg
+              {/* <svg
                 className="w-5 h-5 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -167,7 +167,8 @@ export function Navigation() {
                   strokeWidth={2}
                   d="M13 10V3L4 14h7v7l9-11h-7z"
                 />
-              </svg>
+              </svg> */}
+              <Activity className="w-5 h-5 text-white" />
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-sm leading-none">WebGenie</span>
@@ -248,7 +249,7 @@ export function Navigation() {
           </button>
 
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-medium">
-            U
+            <User className="w-4 h-4 text-white" />
           </div>
         </div>
       </div>
