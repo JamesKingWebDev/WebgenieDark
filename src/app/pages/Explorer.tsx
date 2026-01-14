@@ -723,6 +723,20 @@ const [layoutType, setLayoutType] = useState<'force' | 'circular' | 'grid' | 'hi
                 </div>
               </div>
             </footer> */}
+
+                  {/* Footer */}
+      <footer className="border-t bg-background mt-12">
+        <div className="container mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <p className='text-sm text-muted-foreground'>© 2026 WebGenie Platform. Licensed under MIT. All rights reserved.</p>
+                  <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>Built upon the </span>
+                    <span className="text-primary">BEELINE</span>
+                    <span> GRN Benchmarking Platform </span>
+                  </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

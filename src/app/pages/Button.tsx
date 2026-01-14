@@ -6,6 +6,7 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   icon?: ReactNode;
   onClick?: () => void;
+  onMouseEnter?: () => void;
   disabled?: boolean;
   className?: string;
 }
@@ -16,6 +17,7 @@ export function Button2({
   size = 'md', 
   icon, 
   onClick,
+  onMouseEnter,
   disabled,
   className = ''
 }: ButtonProps) {
@@ -23,8 +25,8 @@ export function Button2({
   
   const variants = {
     primary: 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-secondary)] shadow-sm',
-    secondary: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50',
-    ghost: 'text-gray-600 hover:bg-gray-100',
+    secondary: 'bg-white text-gray-700 border border-gray-300 hover:bg-primary',
+    ghost: 'text-gray-600 hover:bg-gray-400',
     success: 'bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-dark)] shadow-sm'
   };
   
@@ -37,6 +39,7 @@ export function Button2({
   return (
     <button
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
       disabled={disabled}
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
     >

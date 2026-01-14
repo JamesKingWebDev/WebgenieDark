@@ -13,6 +13,9 @@ interface DatasetCardProps {
   lastUpdated?: string;
   sparklineData?: number[];
   onClick?: () => void;
+  dataset: Dataset;
+  onViewDetails: (dataset: Dataset) => void;
+  onDownload: (dataset: Dataset) => void;
 }
 
 export function DatasetCard({ 
@@ -25,6 +28,8 @@ export function DatasetCard({
   source = 'curated',
   lastUpdated = '2024-11-15',
   sparklineData,
+  dataset, 
+  onViewDetails,
   onClick 
 }: DatasetCardProps) {
   const getSourceColor = (src: string) => {
@@ -35,6 +40,8 @@ export function DatasetCard({
       default: return 'default';
     }
   };
+  
+  
 
   return (
     <div 
@@ -85,18 +92,18 @@ export function DatasetCard({
       {sparklineData && (
         <div className="mb-4 p-3 bg-muted-background dark:bg-muted-background-dark rounded-lg">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-muted-foreground dark:text-muted-foreground-dark">Activity Preview</span>
+            <span className="text-xs text-transparent ">Activity Preview</span>
             {/* Mini Preview Sparkline */}
-{sparklineData && (
-  <div className="mb-4 p-3 bg-muted-background dark:bg-muted-background-dark rounded-lg">
-    <div className="flex items-center justify-between mb-2">
-      <span className="text-xs text-muted-foreground dark:text-muted-foreground-dark">
-        Activity Preview
-      </span>
-    </div>
-    <ActivityPreview data={sparklineData} />
-  </div>
-)}
+            {sparklineData && (
+              <div className="mb-4 p-3 bg-muted-background dark:bg-muted-background-dark rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-muted-foreground dark:text-muted-foreground-dark">
+                    Activity Preview
+                  </span>
+                </div>
+                <ActivityPreview data={sparklineData} />
+              </div>
+            )}
 
           </div>
           <svg width="100%" height="32" className="block">
@@ -118,7 +125,8 @@ export function DatasetCard({
           variant="secondary" 
           size="sm" 
           className="flex-1"
-          onClick={(e) => e.stopPropagation()}
+          // onClick={(e) => e.stopPropagation()}
+          onClick={() => onDownload(dataset)}
         >
           View Details
         </Button2>
