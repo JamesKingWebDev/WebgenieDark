@@ -69,125 +69,323 @@ export const mockDatasets: Dataset[] = [
   }
 ];
 
+export interface Algorithm {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  category: string;
+  lastCommitMessage: string;
+  lastCommitDate: string;
+}
+
 export const mockAlgorithms: Algorithm[] = [
   {
     id: 'alg1',
-    name: 'GENIE3',
+    name: 'ARBORETO',
     version: '1.0',
-    description: 'Random forest-based gene regulatory network inference',
-    category: 'Ensemble'
+    description: 'Tree-based network inference using random forests',
+    category: 'Ensemble',
+    lastCommitMessage: 'Yiqi dockerfiles pull',
+    lastCommitDate: '2 years ago'
   },
   {
     id: 'alg2',
-    name: 'PIDC',
-    version: '2.1',
-    description: 'Partial Information Decomposition and Context',
-    category: 'Information Theory'
+    name: 'BTR',
+    version: '1.0',
+    description: 'Boolean network inference with BTR',
+    category: 'Boolean',
+    lastCommitMessage: 'Added BoolTraineR.',
+    lastCommitDate: '7 years ago'
   },
   {
     id: 'alg3',
-    name: 'GRNBoost2',
-    version: '0.7.1',
-    description: 'Gradient boosting for network inference',
-    category: 'Ensemble'
+    name: 'GRISLI',
+    version: '1.0',
+    description: 'Gene regulatory inference using single-cell time series',
+    category: 'Time Series',
+    lastCommitMessage: 'Add README markdown files for algorithms integration',
+    lastCommitDate: '3 years ago'
   },
   {
     id: 'alg4',
-    name: 'PPCOR',
+    name: 'GRNVBEM',
     version: '1.0',
-    description: 'Partial correlation based network inference',
-    category: 'Correlation'
+    description: 'Variational Bayesian EM for network inference',
+    category: 'Bayesian',
+    lastCommitMessage: 'Add README markdown files for algorithms integration',
+    lastCommitDate: '3 years ago'
   },
   {
     id: 'alg5',
-    name: 'SINCERITIES',
-    version: '1.5',
-    description: 'Temporally informed network inference',
-    category: 'Time Series'
+    name: 'JUMP3',
+    version: '1.0',
+    description: 'Time-series network inference',
+    category: 'Time Series',
+    lastCommitMessage: 'tried to run the time command',
+    lastCommitDate: '7 years ago'
   },
   {
     id: 'alg6',
     name: 'LEAP',
     version: '1.2',
-    description: 'Lag-based Expression Association for Pseudotime-series',
-    category: 'Time Series'
+    description: 'Lag-based expression association for pseudotime',
+    category: 'Time Series',
+    lastCommitMessage: 'Add README markdown files for algorithms integration',
+    lastCommitDate: '3 years ago'
   },
   {
     id: 'alg7',
-    name: 'SCENIC',
-    version: '1.1.3',
-    description: 'Single-cell regulatory network inference',
-    category: 'Single Cell'
+    name: 'PIDC',
+    version: '2.1',
+    description: 'Partial Information Decomposition and Context',
+    category: 'Information Theory',
+    lastCommitMessage: 'Yiqi dockerfiles pull',
+    lastCommitDate: '2 years ago'
   },
   {
     id: 'alg8',
-    name: 'GRNVBEM',
+    name: 'PNI',
     version: '1.0',
-    description: 'Variational Bayesian EM for network inference',
-    category: 'Bayesian'
+    description: 'Pseudo-time network inference',
+    category: 'Time Series',
+    lastCommitMessage: 'Added time module to each of the dockers.',
+    lastCommitDate: '7 years ago'
+  },
+  {
+    id: 'alg9',
+    name: 'PPCOR',
+    version: '1.0',
+    description: 'Partial correlation based network inference',
+    category: 'Correlation',
+    lastCommitMessage: 'Add README markdown files for algorithms integration',
+    lastCommitDate: '3 years ago'
+  },
+  {
+    id: 'alg10',
+    name: 'SCINGE',
+    version: '1.0',
+    description: 'Single-cell network inference with time series',
+    category: 'Single Cell',
+    lastCommitMessage: 'Set user to avoid permission issues',
+    lastCommitDate: '5 years ago'
+  },
+  {
+    id: 'alg11',
+    name: 'SCNS',
+    version: '1.0',
+    description: 'Single-cell network inference',
+    category: 'Single Cell',
+    lastCommitMessage: 'scns dockerfile fix',
+    lastCommitDate: '2 years ago'
+  },
+  {
+    id: 'alg12',
+    name: 'SCODE',
+    version: '1.0',
+    description: 'Network inference from single-cell expression data',
+    category: 'Single Cell',
+    lastCommitMessage: 'Add README markdown files for algorithms integration',
+    lastCommitDate: '3 years ago'
+  },
+  {
+    id: 'alg13',
+    name: 'SCRIBE',
+    version: '1.0',
+    description: 'Single-cell trajectory network inference',
+    category: 'Single Cell',
+    lastCommitMessage: 'bioclite is depreceated - moved monocle to biocmanager',
+    lastCommitDate: '2 years ago'
+  },
+  {
+    id: 'alg14',
+    name: 'SCSGL',
+    version: '1.0',
+    description: 'Single-cell sparse gene network learning',
+    category: 'Single Cell',
+    lastCommitMessage: 'Merge pull request #106 from Murali-group/dockerfileupdates',
+    lastCommitDate: '2 years ago'
+  },
+  {
+    id: 'alg15',
+    name: 'SINCERITIES',
+    version: '1.5',
+    description: 'Temporally informed network inference',
+    category: 'Time Series',
+    lastCommitMessage: 'scribe - added new mirror to sources',
+    lastCommitDate: '2 years ago'
+  },
+  {
+    id: 'alg16',
+    name: 'SINGE',
+    version: '1.0',
+    description: 'Single-cell network inference',
+    category: 'Single Cell',
+    lastCommitMessage: 'fixed singe support - patch fix by allowing all certificates',
+    lastCommitDate: '2 years ago'
   }
 ];
+
+
+// export const mockPerformanceMetrics: PerformanceMetrics[] = [
+//   {
+//     algorithmId: 'alg1',
+//     algorithmName: 'GENIE3',
+//     precision: 0.68,
+//     recall: 0.72,
+//     f1Score: 0.70,
+//     auroc: 0.82,
+//     auprc: 0.75,
+//     earlyPrecision: 0.65,
+//     runtime: 125.4,
+//     memoryUsage: 2048
+//   },
+//   {
+//     algorithmId: 'alg2',
+//     algorithmName: 'PIDC',
+//     precision: 0.71,
+//     recall: 0.68,
+//     f1Score: 0.69,
+//     auroc: 0.80,
+//     auprc: 0.73,
+//     earlyPrecision: 0.70,
+//     runtime: 98.2,
+//     memoryUsage: 1536
+//   },
+//   {
+//     algorithmId: 'alg3',
+//     algorithmName: 'GRNBoost2',
+//     precision: 0.74,
+//     recall: 0.76,
+//     f1Score: 0.75,
+//     auroc: 0.85,
+//     auprc: 0.78,
+//     earlyPrecision: 0.72,
+//     runtime: 87.6,
+//     memoryUsage: 1792
+//   },
+//   {
+//     algorithmId: 'alg4',
+//     algorithmName: 'PPCOR',
+//     precision: 0.62,
+//     recall: 0.65,
+//     f1Score: 0.63,
+//     auroc: 0.74,
+//     auprc: 0.68,
+//     earlyPrecision: 0.58,
+//     runtime: 156.8,
+//     memoryUsage: 2560
+//   },
+//   {
+//     algorithmId: 'alg5',
+//     algorithmName: 'SINCERITIES',
+//     precision: 0.66,
+//     recall: 0.70,
+//     f1Score: 0.68,
+//     auroc: 0.78,
+//     auprc: 0.71,
+//     earlyPrecision: 0.63,
+//     runtime: 198.5,
+//     memoryUsage: 3072
+//   },
+//   {
+//     algorithmId: 'alg6',
+//     algorithmName: 'LEAP',
+//     precision: 0.69,
+//     recall: 0.73,
+//     f1Score: 0.71,
+//     auroc: 0.81,
+//     auprc: 0.74,
+//     earlyPrecision: 0.67,
+//     runtime: 143.2,
+//     memoryUsage: 2304
+//   },
+//   {
+//     algorithmId: 'alg7',
+//     algorithmName: 'SCENIC',
+//     precision: 0.70,
+//     recall: 0.69,
+//     f1Score: 0.69,
+//     auroc: 0.79,
+//     auprc: 0.72,
+//     earlyPrecision: 0.68,
+//     runtime: 215.7,
+//     memoryUsage: 3328
+//   },
+//   {
+//     algorithmId: 'alg8',
+//     algorithmName: 'GRNVBEM',
+//     precision: 0.65,
+//     recall: 0.67,
+//     f1Score: 0.66,
+//     auroc: 0.76,
+//     auprc: 0.69,
+//     earlyPrecision: 0.61,
+//     runtime: 178.3,
+//     memoryUsage: 2816
+//   }
+// ];
 
 export const mockPerformanceMetrics: PerformanceMetrics[] = [
   {
     algorithmId: 'alg1',
-    algorithmName: 'GENIE3',
-    precision: 0.68,
-    recall: 0.72,
+    algorithmName: 'ARBORETO',
+    precision: 0.71,
+    recall: 0.69,
     f1Score: 0.70,
     auroc: 0.82,
     auprc: 0.75,
-    earlyPrecision: 0.65,
-    runtime: 125.4,
-    memoryUsage: 2048
+    earlyPrecision: 0.68,
+    runtime: 132.4,
+    memoryUsage: 2200
   },
   {
     algorithmId: 'alg2',
-    algorithmName: 'PIDC',
-    precision: 0.71,
-    recall: 0.68,
-    f1Score: 0.69,
-    auroc: 0.80,
-    auprc: 0.73,
-    earlyPrecision: 0.70,
-    runtime: 98.2,
-    memoryUsage: 1536
+    algorithmName: 'BTR',
+    precision: 0.63,
+    recall: 0.60,
+    f1Score: 0.61,
+    auroc: 0.74,
+    auprc: 0.66,
+    earlyPrecision: 0.57,
+    runtime: 245.1,
+    memoryUsage: 2700
   },
   {
     algorithmId: 'alg3',
-    algorithmName: 'GRNBoost2',
-    precision: 0.74,
-    recall: 0.76,
-    f1Score: 0.75,
-    auroc: 0.85,
-    auprc: 0.78,
-    earlyPrecision: 0.72,
-    runtime: 87.6,
-    memoryUsage: 1792
+    algorithmName: 'GRISLI',
+    precision: 0.68,
+    recall: 0.71,
+    f1Score: 0.69,
+    auroc: 0.80,
+    auprc: 0.72,
+    earlyPrecision: 0.66,
+    runtime: 154.8,
+    memoryUsage: 2400
   },
   {
     algorithmId: 'alg4',
-    algorithmName: 'PPCOR',
-    precision: 0.62,
-    recall: 0.65,
-    f1Score: 0.63,
-    auroc: 0.74,
-    auprc: 0.68,
-    earlyPrecision: 0.58,
-    runtime: 156.8,
-    memoryUsage: 2560
+    algorithmName: 'GRNVBEM',
+    precision: 0.66,
+    recall: 0.67,
+    f1Score: 0.66,
+    auroc: 0.76,
+    auprc: 0.69,
+    earlyPrecision: 0.61,
+    runtime: 178.3,
+    memoryUsage: 2816
   },
   {
     algorithmId: 'alg5',
-    algorithmName: 'SINCERITIES',
-    precision: 0.66,
-    recall: 0.70,
-    f1Score: 0.68,
-    auroc: 0.78,
-    auprc: 0.71,
-    earlyPrecision: 0.63,
-    runtime: 198.5,
-    memoryUsage: 3072
+    algorithmName: 'JUMP3',
+    precision: 0.62,
+    recall: 0.58,
+    f1Score: 0.60,
+    auroc: 0.72,
+    auprc: 0.64,
+    earlyPrecision: 0.55,
+    runtime: 268.9,
+    memoryUsage: 3000
   },
   {
     algorithmId: 'alg6',
@@ -203,29 +401,126 @@ export const mockPerformanceMetrics: PerformanceMetrics[] = [
   },
   {
     algorithmId: 'alg7',
-    algorithmName: 'SCENIC',
-    precision: 0.70,
-    recall: 0.69,
+    algorithmName: 'PIDC',
+    precision: 0.71,
+    recall: 0.68,
     f1Score: 0.69,
-    auroc: 0.79,
-    auprc: 0.72,
-    earlyPrecision: 0.68,
-    runtime: 215.7,
-    memoryUsage: 3328
+    auroc: 0.80,
+    auprc: 0.73,
+    earlyPrecision: 0.70,
+    runtime: 98.2,
+    memoryUsage: 1536
   },
   {
     algorithmId: 'alg8',
-    algorithmName: 'GRNVBEM',
+    algorithmName: 'PNI',
+    precision: 0.64,
+    recall: 0.63,
+    f1Score: 0.63,
+    auroc: 0.75,
+    auprc: 0.67,
+    earlyPrecision: 0.59,
+    runtime: 221.5,
+    memoryUsage: 2600
+  },
+  {
+    algorithmId: 'alg9',
+    algorithmName: 'PPCOR',
+    precision: 0.62,
+    recall: 0.65,
+    f1Score: 0.63,
+    auroc: 0.74,
+    auprc: 0.68,
+    earlyPrecision: 0.58,
+    runtime: 156.8,
+    memoryUsage: 2560
+  },
+  {
+    algorithmId: 'alg10',
+    algorithmName: 'SCINGE',
+    precision: 0.67,
+    recall: 0.64,
+    f1Score: 0.65,
+    auroc: 0.77,
+    auprc: 0.70,
+    earlyPrecision: 0.62,
+    runtime: 285.4,
+    memoryUsage: 3100
+  },
+  {
+    algorithmId: 'alg11',
+    algorithmName: 'SCNS',
+    precision: 0.58,
+    recall: 0.62,
+    f1Score: 0.60,
+    auroc: 0.71,
+    auprc: 0.65,
+    earlyPrecision: 0.54,
+    runtime: 195.7,
+    memoryUsage: 2400
+  },
+  {
+    algorithmId: 'alg12',
+    algorithmName: 'SCODE',
     precision: 0.65,
-    recall: 0.67,
+    recall: 0.68,
     f1Score: 0.66,
     auroc: 0.76,
-    auprc: 0.69,
+    auprc: 0.70,
     earlyPrecision: 0.61,
-    runtime: 178.3,
-    memoryUsage: 2816
+    runtime: 168.3,
+    memoryUsage: 2450
+  },
+  {
+    algorithmId: 'alg13',
+    algorithmName: 'SCRIBE',
+    precision: 0.73,
+    recall: 0.70,
+    f1Score: 0.71,
+    auroc: 0.83,
+    auprc: 0.76,
+    earlyPrecision: 0.69,
+    runtime: 142.6,
+    memoryUsage: 2250
+  },
+  {
+    algorithmId: 'alg14',
+    algorithmName: 'SCSGL',
+    precision: 0.60,
+    recall: 0.64,
+    f1Score: 0.62,
+    auroc: 0.72,
+    auprc: 0.66,
+    earlyPrecision: 0.56,
+    runtime: 209.5,
+    memoryUsage: 2500
+  },
+  {
+    algorithmId: 'alg15',
+    algorithmName: 'SINCERITIES',
+    precision: 0.66,
+    recall: 0.70,
+    f1Score: 0.68,
+    auroc: 0.78,
+    auprc: 0.71,
+    earlyPrecision: 0.63,
+    runtime: 198.5,
+    memoryUsage: 3072
+  },
+  {
+    algorithmId: 'alg16',
+    algorithmName: 'SINGE',
+    precision: 0.69,
+    recall: 0.66,
+    f1Score: 0.67,
+    auroc: 0.79,
+    auprc: 0.72,
+    earlyPrecision: 0.64,
+    runtime: 188.2,
+    memoryUsage: 2890
   }
 ];
+
 
 export const mockJobs: Job[] = [
   {
