@@ -198,13 +198,78 @@ export function DatasetPage() {
   const formatNumber = (n: number) =>
     Intl.NumberFormat('en-US').format(n);
 
-  // ---------------- Backend Integrated Logic ----------------
 
-const API_BASE = "http://localhost:8000"; // <-- Set your FastAPI URL
+
+  
+
+// ---------------- Backend Integrated Logic ----------------
+
+const API_BASE = "http://localhost:8000";
 
 const [isRunning, setIsRunning] = useState(false);
+const [taskId, setTaskId] = useState<string | null>(null);
+const [progress, setProgress] = useState<number>(0);
 const [runResult, setRunResult] = useState<any | null>(null);
 const [showResult, setShowResult] = useState(false);
+
+
+// POLLING INTERVAL
+const POLL_INTERVAL = 1500;
+
+// ---------------- Start Benchmark + Receive Celery Task ID ----------------
+async function handleRunBenchmark() {
+  setIsRunning(true);
+  setProgress(0);
+  setRunResult(null);
+  setTaskId(null);
+
+  try {
+    const res = await fetch(`${API_BASE}/benchmark/run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dataset_id: datasetId }),
+    });
+
+    const data = await res.json();
+    setTaskId(data.task_id);
+
+    pollTaskStatus(data.task_id);
+  } catch (err) {
+    alert("Failed to start benchmark.");
+    setIsRunning(false);
+  }
+}
+
+// ---------------- POLL CELERY TASK STATUS ----------------
+async function pollTaskStatus(taskId: string) {
+  const interval = setInterval(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/benchmark/status/${taskId}`);
+      const data = await res.json();
+
+      setProgress(data.progress ?? 0);
+
+      // DONE
+      if (data.state === "SUCCESS") {
+        clearInterval(interval);
+        setRunResult(data.result);
+        setShowResult(true);
+        setIsRunning(false);
+      }
+
+      // ERROR
+      if (data.state === "FAILURE") {
+        clearInterval(interval);
+        alert("Benchmark failed.");
+        setIsRunning(false);
+      }
+    } catch (err) {
+      clearInterval(interval);
+      setIsRunning(false);
+    }
+  }, POLL_INTERVAL);
+}
+
 
 // ---------------- Download Ground Truth ----------------
 async function handleDownloadGroundTruth() {
@@ -237,31 +302,31 @@ async function handleDownloadGroundTruth() {
 }
 
 // ---------------- Run Benchmark ----------------
-async function handleRunBenchmark() {
-  setIsRunning(true);
+// async function handleRunBenchmark() {
+//   setIsRunning(true);
 
-  try {
-    const res = await fetch(`${API_BASE}/benchmark/run`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ dataset_id: datasetId }),
-    });
+//   try {
+//     const res = await fetch(`${API_BASE}/benchmark/run`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ dataset_id: datasetId }),
+//     });
 
-    if (!res.ok) {
-      alert("Benchmark failed.");
-      setIsRunning(false);
-      return;
-    }
+//     if (!res.ok) {
+//       alert("Benchmark failed.");
+//       setIsRunning(false);
+//       return;
+//     }
 
-    const data = await res.json();
-    setRunResult(data);
-    setShowResult(true);
-  } catch (err) {
-    alert("Benchmark execution failed.");
-  } finally {
-    setIsRunning(false);
-  }
-}
+//     const data = await res.json();
+//     setRunResult(data);
+//     setShowResult(true);
+//   } catch (err) {
+//     alert("Benchmark execution failed.");
+//   } finally {
+//     setIsRunning(false);
+//   }
+// }
 
   return (
     <div className="mt-15 max-w-[1600px] mx-auto px-6 py-8">
@@ -288,7 +353,7 @@ async function handleRunBenchmark() {
 
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <h1 className="text-card-foreground font-semibold text-lg">
+                <h1 className="text-card-foreground font-semibold text-xlg">
                   {ds.name} Dataset
                 </h1>
 
@@ -296,7 +361,7 @@ async function handleRunBenchmark() {
                 <Badge2 variant="info">{ds.type}</Badge2>
               </div>
 
-              <p className="text-muted-foreground mb-3">
+              <p className="text-muted-foreground mb-3 text-lg">
                 {ds.organism} dataset — {ds.type} expression profile
               </p>
 
@@ -327,11 +392,19 @@ async function handleRunBenchmark() {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3">
-            <Button2 variant="secondary" icon={<Download className="w-4 h-4" onClick={handleDownloadGroundTruth}/>}>
+            <Button2 
+              variant="secondary" 
+              icon={<Download className="w-4 h-4"/>}
+              onClick={handleDownloadGroundTruth}
+            >
               Download Ground Truth
             </Button2>
 
-            <Button2 variant="primary" onClick={handleRunBenchmark}>
+            <Button2 
+              variant="primary" 
+              onClick={handleRunBenchmark}
+              disabled={isRunning}
+            >
               {isRunning ? "Running..." : "Run Benchmark"}
             </Button2>
           </div>
@@ -508,25 +581,40 @@ async function handleRunBenchmark() {
         </Button2>
       </div>
 
+      {isRunning && (
+        <div className="mt-6 w-full">
+          <div className="text-sm text-muted-foreground mb-2">
+            Benchmark Running… {progress}%
+          </div>
+          <div className="w-full h-3 bg-muted rounded-lg overflow-hidden">
+            <div
+              className="h-full bg-primary transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        </div>
+      )}
+
+
       {showResult && runResult && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-card p-8 rounded-lg border border-border max-w-lg w-full">
-      <h2 className="text-lg font-semibold text-card-foreground mb-4">
-        Benchmark Completed
-      </h2>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-card p-8 rounded-lg border border-border max-w-lg w-full">
+            <h2 className="text-lg font-semibold text-card-foreground mb-4">
+              Benchmark Completed
+            </h2>
 
-      <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
-{JSON.stringify(runResult, null, 2)}
-      </pre>
+            <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
+              {JSON.stringify(runResult, null, 2)}
+            </pre>
 
-      <div className="mt-6 flex justify-end">
-        <Button2 variant="primary" onClick={() => setShowResult(false)}>
-          Close
-        </Button2>
-      </div>
-    </div>
-  </div>
-)}
+            <div className="mt-6 flex justify-end">
+              <Button2 variant="primary" onClick={() => setShowResult(false)}>
+                Close
+              </Button2>
+            </div>
+          </div>
+        </div>
+      )}
 
 
       {/* Footer */}
