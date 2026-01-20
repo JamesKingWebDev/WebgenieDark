@@ -11,7 +11,55 @@ import { Badge2 } from './Badge';
 import { Input } from '../components/ui/input';
 import { DataTable } from './DataTable';
 
-const columns = [
+interface RunDetailsProps {
+  id: string;
+  status: 'Completed' | 'Running' | 'Failed';
+  algorithm: string;
+  dataset: string;
+  startedAt: string;
+  duration: string;
+}
+
+const prData = Array.from({ length: 30 }, (_, i) => ({
+  recall: i / 29,
+  precision: 0.95 - (i / 29) * 0.4 - Math.random() * 0.08,
+}));
+
+const rocData = Array.from({ length: 30 }, (_, i) => ({
+  fpr: i / 29,
+  tpr: i / 29 + 0.3 * Math.sin((i / 29) * Math.PI),
+}));
+
+const topEdges = [
+ { source: 'SOX2', target: 'NANOG', score: 0.947, runtime: 121.6, type: 'activation', validated: true },
+  { source: 'OCT4', target: 'SOX2', score: 0.923, runtime: 162.7, type: 'activation', validated: true },
+  { source: 'NANOG', target: 'KLF4', score: 0.891, runtime: 153.9, type: 'activation', validated: true },
+  { source: 'MYC', target: 'SOX2', score: 0.867, runtime: 168.3, type: 'inhibition', validated: false },
+  { source: 'KLF4', target: 'MYC', score: 0.834, runtime: 153.5, type: 'activation', validated: true },
+  { source: 'SOX2', target: 'UTF1', score: 0.812, runtime: 114.6, type: 'activation', validated: true },
+  { source: 'NANOG', target: 'DPPA3', score: 0.789, runtime: 165.8, type: 'activation', validated: false },
+  { source: 'OCT4', target: 'NANOG', score: 0.776, runtime: 135.6, type: 'activation', validated: true },
+  { source: 'MYC', target: 'TERT', score: 0.754, runtime: 196.3, type: 'activation', validated: true },
+  { source: 'KLF4', target: 'ESRRB', score: 0.732, runtime: 163.6, type: 'activation', validated: false }
+];
+
+export function RunDetails({
+    id,
+    status,
+    algorithm,
+    dataset,
+    startedAt,
+    duration,
+}: RunDetailsProps) {
+  const { id2 } = useParams();
+  const navigate = useNavigate();
+
+  const [topK, setTopK] = useState('500');
+  const [threshold, setThreshold] = useState(0.7);
+  const [edgeFilter, setEdgeFilter] = useState('both');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const columns = [
     { 
       key: 'source', 
       label: 'Source Gene',
@@ -22,7 +70,7 @@ const columns = [
       key: 'target', 
       label: 'Target Gene',
       sortable: true,
-      render: (val: string) => <span className="font-mono text-gray-700">{val}</span>
+      render: (val: string) => <span className="font-mono">{val}</span>
     },
     { 
       key: 'score', 
@@ -34,6 +82,22 @@ const columns = [
             <div 
               className="h-full bg-gradient-to-r from-purple-400 to-purple-600"
               style={{ width: `${val * 100}%` }}
+            />
+          </div>
+          <span className="text-sm">{val.toFixed(3)}</span>
+        </div>
+      )
+    },
+    { 
+      key: 'runtime', 
+      label: 'Runtime (s)',
+      sortable: true,
+      render: (val: number) => (
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden max-w-[100px]">
+            <div 
+              className="h-full bg-gradient-to-r from-green-400 to-green-600"
+              style={{ width: `${val * 0.5}%` }}
             />
           </div>
           <span className="text-sm">{val.toFixed(3)}</span>
@@ -60,31 +124,6 @@ const columns = [
     }
   ];
 
-const prData = Array.from({ length: 30 }, (_, i) => ({
-  recall: i / 29,
-  precision: 0.95 - (i / 29) * 0.4 - Math.random() * 0.08,
-}));
-
-const rocData = Array.from({ length: 30 }, (_, i) => ({
-  fpr: i / 29,
-  tpr: i / 29 + 0.3 * Math.sin((i / 29) * Math.PI),
-}));
-
-const topEdges = [
-  { source: 'SOX2', target: 'NANOG', score: 0.947, type: 'activation', validated: true },
-  { source: 'OCT4', target: 'SOX2', score: 0.923, type: 'activation', validated: true },
-  { source: 'NANOG', target: 'KLF4', score: 0.891, type: 'activation', validated: true },
-];
-
-export function RunDetails() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const [topK, setTopK] = useState('500');
-  const [threshold, setThreshold] = useState(0.7);
-  const [edgeFilter, setEdgeFilter] = useState('both');
-  const [searchQuery, setSearchQuery] = useState('');
-
   return (
     <div className="min-h-screen py-20">
       <div className="container mx-auto px-4">
@@ -93,14 +132,61 @@ export function RunDetails() {
         <Button
           variant="ghost"
           className="mb-6"
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate(-1)}
+        //   onClick={() => navigate('/dashboard')}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Dashboard
+          {/* Back to Dashboard */}
+          Back to Dataset
         </Button>
 
+        <Card className="p-6 mb-6">
+      <div className="flex items-start justify-between gap-6">
+        {/* Left */}
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-2xl font-semibold text-foreground">
+              Run {id}
+            </h1>
+
+            <Badge2
+              variant={
+                status === 'Completed'
+                  ? 'success'
+                  : status === 'Running'
+                  ? 'secondary'
+                  : 'destructive'
+              }
+            >
+              {status}
+            </Badge2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm mt-4">
+            <MetaItem label="Algorithm" value={algorithm} />
+            <MetaItem label="Dataset" value={dataset} />
+            <MetaItem label="Started" value={startedAt} />
+            <MetaItem label="Duration" value={duration} />
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="flex gap-3">
+          <Button variant="ghost" size="sm">
+            <Share2 className="w-4 h-4 mr-2" />
+            Share
+          </Button>
+
+          <Button variant="secondary" size="sm">
+            <Download className="w-4 h-4 mr-2" />
+            Export Results
+          </Button>
+        </div>
+      </div>
+    </Card>
+
         {/* Header */}
-        <Card className="p-6">
+        <Card className="p-6 mb-5">
   <h3 className="text-foreground mb-1">Precision–Recall Curve</h3>
   <p className="text-sm text-muted-foreground mb-4">
     AUPRC: 0.847
@@ -151,7 +237,7 @@ export function RunDetails() {
       <Line
         type="monotone"
         dataKey="precision"
-        stroke="hsl(var(--primary))"
+        stroke="var(--secondary)"
         strokeWidth={3}
         dot={false}
         isAnimationActive={false}
@@ -226,12 +312,12 @@ export function RunDetails() {
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={prData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="recall" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
+                  <XAxis dataKey="recall" stroke="var(--muted-foreground)" />
+                  <YAxis stroke="var(--muted-foreground)" />
                   <Tooltip />
                   <Line
                     dataKey="precision"
-                    stroke="hsl(var(--primary))"
+                    stroke="var(--primary)"
                     strokeWidth={3}
                     dot={false}
                   />
@@ -239,26 +325,21 @@ export function RunDetails() {
               </ResponsiveContainer>
             </Card>
 
-            <Card className="p-6">
-              <h3 className="text-foreground mb-4">Top Predicted Edges</h3>
-              <DataTable columns={columns}  data={topEdges} />
-            </Card>
-          </div>
-        </div>
-        <Card className="p-6 mb-6">
-  <h3 className="text-foreground mb-4">Run Metrics</h3>
+            <Card className="p-6 mb-6">
+  <h3 className="text-foreground mb-4">Run Details</h3>
 
   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
     {[
       { label: 'AUPRC', value: '0.847' },
       { label: 'AUROC', value: '0.923' },
       { label: 'F1 Score', value: '0.782' },
+      { label: 'Runtime (s)', value: '1.782' },
       { label: 'Early Prec', value: '0.891' },
-      { label: 'Runtime', value: '252s' },
+      { label: 'Runtime (s)', value: '152.6' },
     ].map(({ label, value }) => (
       <div
         key={label}
-        className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-center"
+        className="rounded-lg border border-border bg-accent px-4 py-3 text-center"
       >
         <p className="text-xs uppercase tracking-wide text-muted-foreground">
           {label}
@@ -271,7 +352,25 @@ export function RunDetails() {
   </div>
 </Card>
 
+            <Card className="p-6">
+              <h3 className="text-foreground mb-4">Top Predicted Edges</h3>
+              <DataTable columns={columns}  data={topEdges} />
+            </Card>
+          </div>
+        </div>
+        
+
       </div>
+    </div>
+  );
+}
+
+/* Small helper for consistent typography */
+function MetaItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-muted-foreground mb-1">{label}</p>
+      <p className="text-foreground font-medium">{value}</p>
     </div>
   );
 }
