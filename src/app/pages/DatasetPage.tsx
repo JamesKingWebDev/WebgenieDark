@@ -1,7 +1,8 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Badge2 } from './Badge';
 import { Button2 } from './Button';
 import { MetricCard } from './MetricCard';
+// import { useLocation } from 'react-router-dom';
 import { Download, Activity, FileText, TrendingUp, ArrowLeft } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -21,6 +22,8 @@ const cellTypeData = [
 ];
 
 export function DatasetPage() {
+  
+const location = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -45,7 +48,7 @@ export function DatasetPage() {
             </div>
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <h1 className="text-card-foreground font-semibold text-lg">hESC Dataset</h1>
+                <h1 className="text-card-foreground font-semibold text-lg">{location.pathname.substring(9)} Dataset</h1>
                 <Badge2 variant="success">Validated</Badge2>
                 <Badge2 variant="info">scRNA-seq</Badge2>
               </div>
